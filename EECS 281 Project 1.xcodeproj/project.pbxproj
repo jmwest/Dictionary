@@ -28,6 +28,7 @@
 		277B84501A6596C8003B1487 /* letter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = letter.h; sourceTree = SOURCE_ROOT; };
 		27B647CB1A65965900785596 /* EECS 281 Project 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27CAB3831A68F88D0083040C /* dictionary-large.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-large.txt"; sourceTree = "<group>"; };
+		27CAB3841A68FBAC0083040C /* dictionary-short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-short.txt"; sourceTree = "<group>"; };
 		27DB61D51A686A8B007BC3D3 /* DictionaryEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DictionaryEntry.cpp; sourceTree = SOURCE_ROOT; };
 		27DB61D61A686A8B007BC3D3 /* DictionaryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryEntry.h; sourceTree = SOURCE_ROOT; };
 		27DB61D81A688C47007BC3D3 /* dictionary-medium.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-medium.txt"; sourceTree = "<group>"; };
@@ -49,8 +50,9 @@
 			children = (
 				27B647CD1A65965900785596 /* EECS 281 Project 1 */,
 				27B647CC1A65965900785596 /* Products */,
-				27CAB3831A68F88D0083040C /* dictionary-large.txt */,
+				27CAB3841A68FBAC0083040C /* dictionary-short.txt */,
 				27DB61D81A688C47007BC3D3 /* dictionary-medium.txt */,
+				27CAB3831A68F88D0083040C /* dictionary-large.txt */,
 			);
 			sourceTree = "<group>";
 		};
