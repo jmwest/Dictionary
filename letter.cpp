@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <string>
+#include <deque>
 #include <sstream>
 
 
@@ -33,11 +34,14 @@ void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end,
 vector<string>* storeDictionaryInDataStructure(string* begin, string* end);
 //
 
+vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary);
+//
+
 int main(int argc, char *argv[])
 {
 	// Uncomment to redirect stdin to take input from file
-	ifstream arq(getenv("MYARQ"));
-	cin.rdbuf(arq.rdbuf());
+//	ifstream arq(getenv("MYARQ"));
+//	cin.rdbuf(arq.rdbuf());
 	//
 
 	//valgrind will report memory leak when sync_with_stdio is false
@@ -222,6 +226,40 @@ vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
 	return dictionary;
 }
 
+vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary)
+{
+	vector<string>* path = new vector<string>();
+
+	deque<DictionaryEntry*>* deck = new deque<DictionaryEntry*>();
+
+	DictionaryEntry* first_entry = new DictionaryEntry(begin);
+
+	DictionaryEntry* current_entry;
+
+	deck->push_front(first_entry);
+
+	while (dictionary->size() != 0) {
+		if (rout == STACK) {
+			current_entry = deck->front();
+			deck->pop_front();
+		}
+		else {
+			current_entry = deck->back();
+			deck->pop_back();
+		}
+
+		
+	}
+
+	for (int d = 0; d < deck->size(); d++) {
+		delete deck->front();
+		deck->pop_front();
+	}
+
+	delete [] deck; deck = nullptr;
+
+	return path;
+}
 
 
 
