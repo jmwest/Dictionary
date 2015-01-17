@@ -80,15 +80,15 @@ int main(int argc, char *argv[])
 void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output)
 {
 	static struct option longopts[] = {
-		{"stack",	no_argument,		nullptr, 's'},
-		{"queue",	no_argument,		nullptr, 'q'},
-		{"change",	no_argument,		nullptr, 'c'},
-		{"length",	no_argument,		nullptr, 'l'},
-		{"output",	required_argument,	nullptr, 'o'},
-		{"begin",	required_argument,	nullptr, 'b'},
-		{"end",		required_argument,	nullptr, 'e'},
-		{"help",	no_argument,		nullptr, 'h'},
-		{nullptr,	0,					nullptr, 0},
+		{"stack",	no_argument,		NULL, 's'},
+		{"queue",	no_argument,		NULL, 'q'},
+		{"change",	no_argument,		NULL, 'c'},
+		{"length",	no_argument,		NULL, 'l'},
+		{"output",	required_argument,	NULL, 'o'},
+		{"begin",	required_argument,	NULL, 'b'},
+		{"end",		required_argument,	NULL, 'e'},
+		{"help",	no_argument,		NULL, 'h'},
+		{NULL,		0,					NULL, 0},
 	};
 	int idx = 0;
 	char c;
@@ -259,7 +259,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 	}
 
 	deck->push_front(first_entry);
-	first_entry = nullptr;
+	first_entry = NULL;
 
 	bool reachedTheEnd = false;
 
@@ -349,8 +349,8 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 		used_entries->pop_back();
 	}
 
-	delete deck; deck = nullptr;
-	delete used_entries; used_entries = nullptr;
+	delete deck; deck = NULL;
+	delete used_entries; used_entries = NULL;
 
 	return path;
 }
