@@ -274,7 +274,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 		}
 
 		for (int i = 0; i < dictionary->size(); i++) {
-			if ((modify == CHANGE) or (modify == BOTH)) {
+			if (modify == CHANGE) {
 				if (checkIfChangeMorph(current_entry->getWord(), &dictionary->at(i))) {
 					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
 
@@ -283,11 +283,25 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 					i--;
 				}
 			}
-
-			if ( ((modify == LENGTH) or (modify == BOTH)) and
-				(current_entry->getWord()->compare(*deck->front()->getWord())) ) {
+			else if (modify == LENGTH) {
 				if (checkIfLengthMorph(current_entry->getWord(), &dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i));
+					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+					
+					deck->push_front(new_entry);
+					dictionary->erase(dictionary->begin() + i);
+					i--;
+				}
+			}
+			else if (modify == BOTH) {
+				if (checkIfChangeMorph(current_entry->getWord(), &dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+					
+					deck->push_front(new_entry);
+					dictionary->erase(dictionary->begin() + i);
+					i--;
+				}
+				else if (checkIfLengthMorph(current_entry->getWord(), &dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
 					
 					deck->push_front(new_entry);
 					dictionary->erase(dictionary->begin() + i);
@@ -295,9 +309,11 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 				}
 			}
 
-			if (deck->front()->getWord()->compare(*end) == 0) {
-				reachedTheEnd = true;
-				break;
+			if (deck->size() != 0) {
+				if (deck->front()->getWord()->compare(*end) == 0) {
+					reachedTheEnd = true;
+					break;
+				}
 			}
 		}
 
@@ -372,8 +388,13 @@ bool checkIfLengthMorph(string* one, string* two)
 				discrepancyNumber++;
 				i--;
 			}
+
+			if (discrepancyNumber >= 2) {
+				return false;
+			}
 		}
 
+		// don't need the check?
 		if (discrepancyNumber <= 1) {
 			return true;
 		}
