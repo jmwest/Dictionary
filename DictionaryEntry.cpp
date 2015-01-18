@@ -10,33 +10,33 @@
 
 DictionaryEntry::DictionaryEntry()
 {
-	word = "";
-	previous = "";
+	word = new string();
+	previous = new string();
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry)
-: word(*word_entry)
+: word(word_entry)
 {
-	previous = "";
+	previous = new string();
 }
 
-DictionaryEntry::DictionaryEntry(string* word_entry, string*previous_entry)
-: word(*word_entry), previous(*previous_entry)
+DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
+: word(word_entry), previous(previous_entry)
 {}
 
-string* DictionaryEntry::getWord()
-{
-	return &word;
-}
-
-string* DictionaryEntry::getPreviousWord()
-{
-	return &previous;
-}
-
-void DictionaryEntry::setPreviousEntry(string* previous_entry)
-{
-	previous = *previous_entry;
-
-	return;
-}
+//string* DictionaryEntry::getWord()
+//{
+//	return &word;
+//}
+//
+//string* DictionaryEntry::getPreviousWord()
+//{
+//	return &previous;
+//}
+//
+//void DictionaryEntry::setPreviousEntry(string* previous_entry)
+//{
+//	previous = *previous_entry;
+//
+//	return;
+//}

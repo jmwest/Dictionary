@@ -19,19 +19,22 @@
 using namespace std;
 
 struct DictionaryEntry {
-private:
-	string word;
-	string previous;
+//private:
+//	string word;
+//	string previous;
 
 public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
 	DictionaryEntry(string* word_entry, string* previous_entry);
 
-	string* getWord();
-	string* getPreviousWord();
+	string* word;
+	string* previous;
 
-	void setPreviousEntry(string* previous_entry);
+//	string* getWord();
+//	string* getPreviousWord();
+//
+//	void setPreviousEntry(string* previous_entry);
 };
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
