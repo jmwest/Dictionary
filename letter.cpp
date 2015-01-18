@@ -31,10 +31,10 @@ enum Output {DEFAULTOUTPUT, WOUT, MOUT};
 void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output);
 //
 
-vector<string>* storeDictionaryInDataStructure(string* begin, string* end);
+vector<string*>* storeDictionaryInDataStructure(string* begin, string* end);
 //
 
-vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary);
+vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string*>* dictionary);
 //
 
 bool checkIfChangeMorph(string* one, string* two);
@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
 
 	string begin;
 	string end;
-	vector<string>* dictionary;
-	vector<string>* path;
+	vector<string*>* dictionary;
+	vector<string*>* path;
 	Routing rout = noROUT;
 	Modification modify = noMOD;
 	Output outp = DEFAULTOUTPUT;
@@ -71,9 +71,24 @@ int main(int argc, char *argv[])
 	cout << "Words in morph: " << (int)path->size() << "\n";
 
 	for (int i = (int)path->size() - 1; i >= 0; i--) {
-		cout << path->at(i) << "\n";
+		cout << *path->at(i) << "\n";
 	}
 
+	for (int i = 0; i < dictionary->size(); i++) {
+		if (dictionary->at(i) != NULL) {
+			delete dictionary->at(i); dictionary->at(i) = NULL;
+		}
+	}
+
+	for (int i = 0; i < path->size(); i++) {
+		if (dictionary->at(i) != NULL) {
+			delete path->at(i); path->at(i) = NULL;
+		}
+	}
+
+	delete dictionary; dictionary = NULL;
+	delete path; path = NULL;
+	
 	return 0;
 }
 
@@ -186,11 +201,11 @@ void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end,
 	}
 }
 
-vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
+vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 {
 	string size_in;
 	int size = 0;
-	string entry;
+	string* entry = new string();
 	bool beginIsInDictionary = false;
 	bool endIsInDictionary = false;
 
@@ -198,28 +213,28 @@ vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
 
 	size = atoi(size_in.c_str());
 
-	vector<string>* dictionary = new vector<string>(size);
+	vector<string*>* dictionary = new vector<string*>(size);
 
-	for (int count = 0; getline(cin, entry) and (count < size);) {
-		if (entry.length() == 0) {
+	for (int count = 0; getline(cin, *entry) and (count < size);) {
+		if (entry->length() == 0) {
 			break;
 		}
-		else if (entry.at(0) == ' ') {
+		else if (entry->at(0) == ' ') {
 			break;
 		}
-		else if (entry.at(0) == '\n') {
+		else if (entry->at(0) == '\n') {
 			break;
 		}
 
-		if (entry.at(entry.size() - 1) == '\n') {
-			entry.pop_back();
+		if (entry->at(entry->size() - 1) == '\n') {
+			entry->pop_back();
 		}
 
-		if (entry.at(0) != '/') {
-			if (begin->compare(entry) == 0) {
+		if (entry->at(0) != '/') {
+			if (begin->compare(*entry) == 0) {
 				beginIsInDictionary = true;
 			}
-			else if (end->compare(entry) == 0){
+			else if (end->compare(*entry) == 0){
 				endIsInDictionary = true;
 			}
 
@@ -227,6 +242,8 @@ vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
 
 			count++;
 		}
+
+		entry = new string();
 	}
 
 	if (!beginIsInDictionary) {
@@ -241,9 +258,9 @@ vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
 	return dictionary;
 }
 
-vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary)
+vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string*>* dictionary)
 {
-	vector<string>* path = new vector<string>();
+	vector<string*>* path = new vector<string*>();
 	vector<DictionaryEntry*>* used_entries = new vector<DictionaryEntry*>();
 
 	deque<DictionaryEntry*>* deck = new deque<DictionaryEntry*>();
@@ -253,7 +270,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 	DictionaryEntry* current_entry;
 
 	for (int i = 0; i < dictionary->size(); i++) {
-		if (dictionary->at(i).compare(*begin) == 0) {
+		if (dictionary->at(i)->compare(*begin) == 0) {
 			dictionary->erase(dictionary->begin() + i);
 		}
 	}
@@ -275,15 +292,15 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 
 		for (int i = 0; i < dictionary->size(); i++) {
 			if (modify == BOTH) {
-				if (checkIfChangeMorph(current_entry->getWord(), &dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+				if (checkIfChangeMorph(current_entry->getWord(), dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
 					
 					deck->push_front(new_entry);
 					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
-				else if (checkIfLengthMorph(current_entry->getWord(), &dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+				else if (checkIfLengthMorph(current_entry->getWord(), dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
 					
 					deck->push_front(new_entry);
 					dictionary->erase(dictionary->begin() + i);
@@ -291,8 +308,8 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 				}
 			}
 			else if (modify == LENGTH) {
-				if (checkIfLengthMorph(current_entry->getWord(), &dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+				if (checkIfLengthMorph(current_entry->getWord(), dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
 
 					deck->push_front(new_entry);
 					dictionary->erase(dictionary->begin() + i);
@@ -300,8 +317,8 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 				}
 			}
 			else if (modify == CHANGE) {
-				if (checkIfChangeMorph(current_entry->getWord(), &dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(&dictionary->at(i), current_entry->getWord());
+				if (checkIfChangeMorph(current_entry->getWord(), dictionary->at(i))) {
+					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
 					
 					deck->push_front(new_entry);
 					dictionary->erase(dictionary->begin() + i);
@@ -323,17 +340,19 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 	if (deck->size() != 0) {
 		string* backtrack = deck->front()->getPreviousWord();
 
-		path->push_back(*deck->front()->getWord());
+		path->push_back(deck->front()->getWord());
+
+		deck->pop_front();
 
 		for (int f = 0; f < used_entries->size(); f++) {
 			if (backtrack->compare(*used_entries->at(f)->getWord()) == 0) {
-				path->push_back(*backtrack);
+				path->push_back(backtrack);
 				backtrack = used_entries->at(f)->getPreviousWord();
 				f = 0;
 			}
 
 			if (backtrack->compare(*begin) == 0) {
-				path->push_back(*backtrack);
+				path->push_back(backtrack);
 				break;
 			}
 		}
