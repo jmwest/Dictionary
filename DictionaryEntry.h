@@ -19,10 +19,6 @@
 using namespace std;
 
 struct DictionaryEntry {
-//private:
-//	string word;
-//	string previous;
-
 public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
@@ -30,11 +26,22 @@ public:
 
 	string* word;
 	string* previous;
-
-//	string* getWord();
-//	string* getPreviousWord();
-//
-//	void setPreviousEntry(string* previous_entry);
 };
+
+DictionaryEntry::DictionaryEntry()
+{
+	word = new string();
+	previous = new string();
+}
+
+DictionaryEntry::DictionaryEntry(string* word_entry)
+: word(word_entry)
+{
+	previous = new string();
+}
+
+DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
+: word(word_entry), previous(previous_entry)
+{}
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
