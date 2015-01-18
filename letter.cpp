@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	//
 
 	//valgrind will report memory leak when sync_with_stdio is false
-	ios_base::sync_with_stdio(false);
+//	ios_base::sync_with_stdio(false);
 	//
 
 	string begin;
@@ -74,13 +74,13 @@ int main(int argc, char *argv[])
 		cout << *path->at(i) << "\n";
 	}
 
-	for (int i = 0; i < dictionary->size(); i++) {
+	for (unsigned int i = 0; i < dictionary->size(); i++) {
 		if (dictionary->at(i) != NULL) {
 			delete dictionary->at(i); dictionary->at(i) = NULL;
 		}
 	}
 
-	for (int i = 0; i < path->size(); i++) {
+	for (unsigned int i = 0; i < path->size(); i++) {
 		if (dictionary->at(i) != NULL) {
 			delete path->at(i); path->at(i) = NULL;
 		}
@@ -217,17 +217,21 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 
 	for (int count = 0; getline(cin, *entry) and (count < size);) {
 		if (entry->length() == 0) {
+			delete entry; entry = NULL;
 			break;
 		}
 		else if (entry->at(0) == ' ') {
+			delete entry; entry = NULL;
 			break;
 		}
 		else if (entry->at(0) == '\n') {
+			delete entry; entry = NULL;
 			break;
 		}
 
 		if (entry->at(entry->size() - 1) == '\n') {
-			entry->pop_back();
+//			entry->pop_back();
+			entry->erase(entry->begin() + entry->size() - 1);
 		}
 
 		if (entry->at(0) != '/') {
@@ -242,9 +246,14 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 
 			count++;
 		}
+		else {
+			delete entry; entry = NULL;
+		}
 
 		entry = new string();
 	}
+
+	delete entry; entry = NULL;
 
 	if (!beginIsInDictionary) {
 		cerr << "begin does not exist in the dictionary. Program exit(1)\n";
@@ -269,7 +278,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 
 	DictionaryEntry* current_entry;
 
-	for (int i = 0; i < dictionary->size(); i++) {
+	for (unsigned int i = 0; i < dictionary->size(); i++) {
 		if (dictionary->at(i)->compare(*begin) == 0) {
 			dictionary->erase(dictionary->begin() + i);
 		}
@@ -290,7 +299,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 			deck->pop_back();
 		}
 
-		for (int i = 0; i < dictionary->size(); i++) {
+		for (unsigned int i = 0; i < dictionary->size(); i++) {
 			if (modify == BOTH) {
 				if (checkIfChangeMorph(current_entry->word, dictionary->at(i))) {
 					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->word);
@@ -338,17 +347,21 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 	}
 
 	if (deck->size() != 0) {
-		string* backtrack = deck->front()->previous;
+		string* backtrack = deck->front()->word;
 
 		path->push_back(deck->front()->previous);
 
+		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 
-		for (int f = 0; f < used_entries->size(); f++) {
+		for (unsigned int f = 0; f < used_entries->size(); f++) {
 			if (backtrack->compare(*used_entries->at(f)->word) == 0) {
 				path->push_back(backtrack);
 				backtrack = used_entries->at(f)->previous;
+
+				delete used_entries->at(f); used_entries->at(f) = NULL;
 				used_entries->erase(used_entries->begin() + f);
+
 				f = 0;
 			}
 
@@ -359,12 +372,12 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 		}
 	}
 
-	for (int d = 0; d < deck->size(); d++) {
+	for (unsigned int d = 0; d < deck->size(); d++) {
 		delete deck->front();
 		deck->pop_front();
 	}
 
-	for (int u = 0; u < used_entries->size(); u++) {
+	for (unsigned int u = 0; u < used_entries->size(); u++) {
 		delete used_entries->back();
 		used_entries->pop_back();
 	}
@@ -380,7 +393,7 @@ bool checkIfChangeMorph(string* one, string* two)
 	int discrepancyNumber = 0;
 
 	if (one->size() == two->size()) {
-		for (int i = 0; i < one->size(); i++) {
+		for (unsigned int i = 0; i < one->size(); i++) {
 			if (one->at(i) != two->at(i)) {
 				discrepancyNumber++;
 			}

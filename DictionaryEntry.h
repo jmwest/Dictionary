@@ -23,6 +23,7 @@ public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
 	DictionaryEntry(string* word_entry, string* previous_entry);
+	~DictionaryEntry();
 
 	string* word;
 	string* previous;
@@ -43,5 +44,11 @@ DictionaryEntry::DictionaryEntry(string* word_entry)
 DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
 : word(word_entry), previous(previous_entry)
 {}
+
+DictionaryEntry::~DictionaryEntry()
+{
+	delete word; word = NULL;
+	delete previous; previous = NULL;
+}
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
