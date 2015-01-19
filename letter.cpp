@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (unsigned int i = 0; i < path->size(); i++) {
+	for (unsigned int i = 1; i < path->size() - 1; i++) {
 		if (path->at(i) != NULL) {
 			delete path->at(i); path->at(i) = NULL;
 		}
@@ -217,7 +217,8 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 {
 	string size_in;
 	int size = 0;
-	string* entry = new string();
+//	string* entry = new string();
+	string entry;
 	bool beginIsInDictionary = false;
 	bool endIsInDictionary = false;
 
@@ -227,45 +228,61 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 
 	vector<string*>* dictionary = new vector<string*>(size);
 
-	for (int count = 0; getline(cin, *entry) and (count < size);) {
-		if (entry->length() == 0) {
-			delete entry; entry = NULL;
+//	for (int i = 0; i < dictionary->size(); i++) {
+//		dictionary->at(i) = new string();
+//	}
+
+	for (int count = 0; getline(cin, entry) and (count < size);) {
+//		getline(cin, *dictionary->at(count));
+
+		if (entry.length() == 0) {
+//		if (dictionary->at(count)->length() == 0) {
+//			delete entry; entry = NULL;
 			break;
 		}
-		else if (entry->at(0) == ' ') {
-			delete entry; entry = NULL;
+		else if (entry.at(0) == ' ') {
+//		else if (dictionary->at(count)->at(0) == ' ') {
+//			delete entry; entry = NULL;
 			break;
 		}
-		else if (entry->at(0) == '\n') {
-			delete entry; entry = NULL;
+		else if (entry.at(0) == '\n') {
+//		else if (dictionary->at(count)->at(0) == '\n') {
+//			delete entry; entry = NULL;
 			break;
 		}
 
-		if (entry->at(entry->size() - 1) == '\n') {
-//			entry->pop_back();
-			entry->erase(entry->begin() + entry->size() - 1);
+		if (entry.at(entry.size() - 1) == '\n') {
+//		if (dictionary->at(count)->at(dictionary->at(count)->size() - 1) == '\n') {
+//			entry->pop_back()
+
+			entry.erase(entry.begin() + entry.size() - 1);
+//			entry->erase(entry->begin() + entry->size() - 1);
+//			dictionary->at(count)->erase(dictionary->at(count)->begin() + dictionary->at(count)->size() - 1);
 		}
 
-		if (entry->at(0) != '/') {
-			if (begin->compare(*entry) == 0) {
+		if (entry.at(0) != '/') {
+//		if (dictionary->at(count)->at(0) != '/') {
+			if (begin->compare(entry) == 0) {
+//			if (begin->compare(*dictionary->at(count)) == 0) {
 				beginIsInDictionary = true;
 			}
-			else if (end->compare(*entry) == 0){
+			else if (end->compare(entry) == 0) {
+//			else if (end->compare(*dictionary->at(count)) == 0) {
 				endIsInDictionary = true;
 			}
 
-			dictionary->at(count) = entry;
+			dictionary->at(count) = new string(entry);
 
 			count++;
 		}
-		else {
-			delete entry; entry = NULL;
-		}
+//		else {
+//			delete entry; entry = NULL;
+//		}
 
-		entry = new string();
+//		entry = new string();
 	}
 
-	delete entry; entry = NULL;
+//	delete entry; entry = NULL;
 
 	if (!beginIsInDictionary) {
 		cerr << "begin does not exist in the dictionary. Program exit(1)\n";
@@ -293,6 +310,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 	for (unsigned int i = 0; i < dictionary->size(); i++) {
 		if (dictionary->at(i)->compare(*begin) == 0) {
 			first_entry->word = dictionary->at(i);
+			dictionary->at(i) = NULL;
 			dictionary->erase(dictionary->begin() + i);
 		}
 	}
@@ -318,6 +336,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->word);
 
 					deck->push_front(new_entry);
+					dictionary->at(i) = NULL;
 					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
@@ -325,6 +344,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->word);
 
 					deck->push_front(new_entry);
+					dictionary->at(i) = NULL;
 					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
@@ -334,6 +354,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->word);
 
 					deck->push_front(new_entry);
+					dictionary->at(i) = NULL;
 					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
@@ -343,6 +364,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->word);
 
 					deck->push_front(new_entry);
+					dictionary->at(i) = NULL;
 					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
