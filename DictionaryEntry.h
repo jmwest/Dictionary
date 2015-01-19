@@ -24,21 +24,21 @@ public:
 	DictionaryEntry(string* word_entry);
 	DictionaryEntry(string* word_entry, string* previous_entry);
 	~DictionaryEntry();
-
+	// the destructor might be bad
 	string* word;
 	string* previous;
 };
 
 DictionaryEntry::DictionaryEntry()
 {
-	word = new string();
-	previous = new string();
+	word = NULL;
+	previous = NULL;
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry)
 : word(word_entry)
 {
-	previous = new string();
+	previous = NULL;
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
@@ -47,8 +47,8 @@ DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
 
 DictionaryEntry::~DictionaryEntry()
 {
-	delete word; word = NULL;
-	delete previous; previous = NULL;
+//	delete word; word = NULL;
+//	delete previous; previous = NULL;
 }
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
