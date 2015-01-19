@@ -88,11 +88,11 @@ int main(int argc, char *argv[])
 		}
 	}
 
-//	for (unsigned int i = 1; i < path->size() - 1; i++) {
-//		if (path->at(i) != NULL) {
-//			delete path->at(i); path->at(i) = NULL;
-//		}
-//	}
+	for (unsigned int i = 1; i < path->size() - 1; i++) {
+		if (path->at(i) != NULL) {
+			delete path->at(i); path->at(i) = NULL;
+		}
+	}
 
 	delete dictionary; dictionary = NULL;
 	delete path; path = NULL;

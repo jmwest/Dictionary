@@ -67,12 +67,12 @@ void DictionaryEntry::setPrevious(string* previous_in)
 
 string* DictionaryEntry::getWord() const
 {
-	return word;
+	return new string(*word);
 }
 
 string* DictionaryEntry::getPrevious() const
 {
-	return previous;
+	return new string(*previous);
 }
 
 DictionaryEntry::~DictionaryEntry()
