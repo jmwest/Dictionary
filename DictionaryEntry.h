@@ -19,14 +19,21 @@
 using namespace std;
 
 struct DictionaryEntry {
+private:
+	string* word;
+	string* previous;
+
 public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
 	DictionaryEntry(string* word_entry, string* previous_entry);
 	~DictionaryEntry();
-	// the destructor might be bad
-	string* word;
-	string* previous;
+
+	void setWord(string* word_in);
+	void setPrevious(string* previous_in);
+
+	string* getWord() const;
+	string* getPrevious() const;
 };
 
 DictionaryEntry::DictionaryEntry()
@@ -36,19 +43,47 @@ DictionaryEntry::DictionaryEntry()
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry)
-: word(word_entry)
 {
+	word = new string(*word_entry);
 	previous = NULL;
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
 : word(word_entry), previous(previous_entry)
-{}
+{
+	word = new string(*word_entry);
+	previous = new string(*previous_entry);
+}
+
+void DictionaryEntry::setWord(string* word_in)
+{
+	word = new string(*word_in);
+}
+
+void DictionaryEntry::setPrevious(string* previous_in)
+{
+	previous = new string(*previous_in);
+}
+
+string* DictionaryEntry::getWord() const
+{
+	return word;
+}
+
+string* DictionaryEntry::getPrevious() const
+{
+	return previous;
+}
 
 DictionaryEntry::~DictionaryEntry()
 {
-//	delete word; word = NULL;
-//	delete previous; previous = NULL;
+	if (word != NULL) {
+		delete word; word = NULL;
+	}
+
+	if (previous != NULL) {
+		delete previous; previous = NULL;
+	}
 }
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
