@@ -351,6 +351,13 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 		deck->pop_front();
 
 		for (unsigned int f = 0; f < used_entries->size(); f++) {
+			if (*backtrack == *begin) {
+				path->push_back(begin);
+				
+				delete backtrack; backtrack = NULL;
+				break;
+			}
+
 			if (*backtrack == *used_entries->at(f)->getWord()) {
 				path->push_back(backtrack);
 				backtrack = new string(*used_entries->at(f)->getPrevious());
@@ -361,12 +368,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 				f = 0;
 			}
 
-			if (backtrack->compare(*begin) == 0) {
-				path->push_back(begin);
 
-				delete backtrack; backtrack = NULL;
-				break;
-			}
 		}
 	}
 
