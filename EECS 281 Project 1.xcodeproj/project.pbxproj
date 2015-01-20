@@ -29,6 +29,19 @@
 		279290D41A6C7F4E0022B943 /* dictionary-medium-4343.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-medium-4343.txt"; sourceTree = "<group>"; };
 		279290D51A6C7F4E0022B943 /* dictionary-short-8.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-short-8.txt"; sourceTree = "<group>"; };
 		279290D61A6C7F4E0022B943 /* dictionary-short-20.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-short-20.txt"; sourceTree = "<group>"; };
+		27B8AF451A6EF43400DBDAA8 /* test-1-rat-bin-qcm.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-1-rat-bin-qcm.txt"; sourceTree = SOURCE_ROOT; };
+		27B8AF461A6EF47400DBDAA8 /* test-2-sea-nifty-sclw.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-2-sea-nifty-sclw.txt"; sourceTree = "<group>"; };
+		27B8AF471A6EF47400DBDAA8 /* test-3-aardvark-aardvark-slm.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-aardvark-aardvark-slm.txt"; sourceTree = "<group>"; };
+		27B8AF491A6EF47400DBDAA8 /* test-5-mad-Made-qclw.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-5-mad-Made-qclw.txt"; sourceTree = "<group>"; };
+		27B8AF4A1A6EFAE300DBDAA8 /* test-1-rat-bin-qcm-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-1-rat-bin-qcm-correct.txt"; sourceTree = "<group>"; };
+		27B8AF4C1A6EFFD600DBDAA8 /* test-2-sea-nifty-sclw-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-2-sea-nifty-sclw-correct.txt"; sourceTree = "<group>"; };
+		27B8AF4D1A6F057F00DBDAA8 /* test-3-aardvark-aardvark-slm-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-aardvark-aardvark-slm-correct.txt"; sourceTree = "<group>"; };
+		27B8AF4F1A6F0A5E00DBDAA8 /* test-5-mad-Made-qclw-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-5-mad-Made-qclw-correct.txt"; sourceTree = "<group>"; };
+		27B8AF511A6F0F0E00DBDAA8 /* test1.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test1.out; sourceTree = "<group>"; };
+		27B8AF521A6F0F4C00DBDAA8 /* test2.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test2.out; sourceTree = "<group>"; };
+		27B8AF531A6F0F4C00DBDAA8 /* test3.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test3.out; sourceTree = "<group>"; };
+		27B8AF541A6F0F4C00DBDAA8 /* test4.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test4.out; sourceTree = "<group>"; };
+		27B8AF551A6F0F4C00DBDAA8 /* test5.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test5.out; sourceTree = "<group>"; };
 		27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27CA80851A6EC7FF002FEA8C /* dictionary-xlarge-234936.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-xlarge-234936.txt"; sourceTree = "<group>"; };
 		27DB61D61A686A8B007BC3D3 /* DictionaryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryEntry.h; sourceTree = SOURCE_ROOT; };
@@ -55,6 +68,7 @@
 				279290D41A6C7F4E0022B943 /* dictionary-medium-4343.txt */,
 				279290D51A6C7F4E0022B943 /* dictionary-short-8.txt */,
 				279290D61A6C7F4E0022B943 /* dictionary-short-20.txt */,
+				27B8AF4B1A6EFAF300DBDAA8 /* Tests */,
 				27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +82,34 @@
 				27E55F311A6ACBB700A4F816 /* Makefile */,
 			);
 			path = "EECS 281 Project 1";
+			sourceTree = "<group>";
+		};
+		27B8AF4B1A6EFAF300DBDAA8 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				27B8AF501A6F0F0300DBDAA8 /* Out */,
+				27B8AF451A6EF43400DBDAA8 /* test-1-rat-bin-qcm.txt */,
+				27B8AF4A1A6EFAE300DBDAA8 /* test-1-rat-bin-qcm-correct.txt */,
+				27B8AF461A6EF47400DBDAA8 /* test-2-sea-nifty-sclw.txt */,
+				27B8AF4C1A6EFFD600DBDAA8 /* test-2-sea-nifty-sclw-correct.txt */,
+				27B8AF471A6EF47400DBDAA8 /* test-3-aardvark-aardvark-slm.txt */,
+				27B8AF4D1A6F057F00DBDAA8 /* test-3-aardvark-aardvark-slm-correct.txt */,
+				27B8AF491A6EF47400DBDAA8 /* test-5-mad-Made-qclw.txt */,
+				27B8AF4F1A6F0A5E00DBDAA8 /* test-5-mad-Made-qclw-correct.txt */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		27B8AF501A6F0F0300DBDAA8 /* Out */ = {
+			isa = PBXGroup;
+			children = (
+				27B8AF511A6F0F0E00DBDAA8 /* test1.out */,
+				27B8AF521A6F0F4C00DBDAA8 /* test2.out */,
+				27B8AF531A6F0F4C00DBDAA8 /* test3.out */,
+				27B8AF541A6F0F4C00DBDAA8 /* test4.out */,
+				27B8AF551A6F0F4C00DBDAA8 /* test5.out */,
+			);
+			name = Out;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

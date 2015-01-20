@@ -87,25 +87,21 @@ int main(int argc, char *argv[])
 		path = findLettermansPath(rout, modify, &begin, &end, dictionary);
 	}
 
-	////////////////////////////////////////////////////////////
-//	ostringstream ss;
-//	
-//	ss << "Words in morph: " << (int)path->size() << "\n";
-//	
-//	for (int i = (int)path->size() - 1; i >= 0; i--) {
-//		ss << *path->at(i) << "\n";
-//	}
-//	
-//	cout << ss.str();
-	////////////////////////////////////////////////////////////
+	if (path->size() == 0) {
+		ostringstream ss;
 
-	if (outp == MOUT) {
-		printPathModifications(path);
+		ss << "No solution.";
+
+		cout << ss.str();
 	}
 	else {
-		printPathWords(path);
+		if (outp == MOUT) {
+			printPathModifications(path);
+		}
+		else {
+			printPathWords(path);
+		}
 	}
-
 
 	for (unsigned int i = 0; i < dictionary->size(); i++) {
 		if (dictionary->at(i)) {
@@ -367,22 +363,29 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 
-		for (int f = 0; f < (int)used_entries->size(); f++) {
-			if (*backtrack == *begin) {
-				path->push_back(begin);
-				
-				delete backtrack; backtrack = NULL;
-				break;
-			}
+		if (*backtrack == *begin) {
+			path->push_back(begin);
 
-			if (*backtrack == *used_entries->at(f)->getWord()) {
-				path->push_back(backtrack);
-				backtrack = new string(*used_entries->at(f)->getPrevious());
+			delete backtrack; backtrack = NULL;
+		}
+		else {
+			for (int f = 0; f < (int)used_entries->size(); f++) {
+				if (*backtrack == *used_entries->at(f)->getWord()) {
+					path->push_back(backtrack);
+					backtrack = new string(*used_entries->at(f)->getPrevious());
 
-				delete used_entries->at(f); used_entries->at(f) = NULL;
-				used_entries->erase(used_entries->begin() + f);
+					delete used_entries->at(f); used_entries->at(f) = NULL;
+					used_entries->erase(used_entries->begin() + f);
 
-				f = 0;
+					f = 0;
+				}
+
+				if (*backtrack == *begin) {
+					path->push_back(begin);
+					
+					delete backtrack; backtrack = NULL;
+					break;
+				}
 			}
 		}
 	}
@@ -498,8 +501,8 @@ int find_positional_difference(string* current, string* next)
 {
 	int position = -1;
 
-	for (int i = 0; i < current->length(); i++) {
-		if (i == next->length()) {
+	for (int i = 0; i < (int)current->length(); i++) {
+		if (i == (int)next->length()) {
 			position = i;
 			break;
 		}

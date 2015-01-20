@@ -1,0 +1,52 @@
+20
+// 20 word dictionary from sea to nifty.
+// Words are already in correct order
+sea
+//
+see
+// lots of comments
+// to make sure
+// comment handling works
+bee
+//
+//
+be
+//
+he
+her
+//
+heir
+//
+hair
+//
+//
+air
+aid
+//       ///////////////
+//      // . /////// . //
+//     ///   ///////   ///
+//     ///////// /////////
+//      ///////././//////
+//      //  /////////  //
+//      ///           ///
+//       ///////////////
+//         ///////////
+ad
+//
+at
+//
+art
+fart
+fort
+//
+forth
+firth
+//
+//
+fifth
+//
+fifty
+//
+nifty
+//
+//

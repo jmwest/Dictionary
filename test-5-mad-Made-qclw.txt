@@ -1,0 +1,16 @@
+13
+// thirteen word dictionary.
+// Makes sure that capitals are treated separately from lowercase
+mad
+Made
+wade
+wader
+water
+Water
+Waiter
+Waited
+baited
+bated
+bate
+bat
+bad

@@ -1,0 +1,15 @@
+13
+// Test case 1 with a lot of similar words that can morph into each other.
+ran
+tan
+can
+man
+sand
+ban
+band
+van
+wan
+pan
+fan
+rat
+bin

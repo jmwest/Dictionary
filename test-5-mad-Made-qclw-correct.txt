@@ -1,4 +1,4 @@
-Words in morph: 14
+Words in morph: 13
 mad
 bad
 bat
@@ -10,6 +10,5 @@ Waiter
 Water
 water
 wader
-Wader
-Wade
+wade
 Made

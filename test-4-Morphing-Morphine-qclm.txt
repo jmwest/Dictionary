@@ -1,0 +1,9 @@
+7
+// seven word dictionary. Begin and end are only one morph away from each other
+warp
+drive
+cool
+Morphine
+Morph
+gulp
+Morphing
