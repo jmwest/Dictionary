@@ -35,7 +35,9 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end);
 //
 
 vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string*>* dictionary);
-//
+// Returns a pointer to a vector of string pointers that contains
+//		the path from begin to end through the dictionary.
+// ->at(0) contains *end, and ->back() contains *begin
 
 bool checkIfChangeMorph(string* one, string* two);
 //
@@ -43,7 +45,13 @@ bool checkIfChangeMorph(string* one, string* two);
 bool checkIfLengthMorph(string* one, string* two);
 //
 
-void printPath(vector<string*>*);
+void printPathWords(vector<string*>* path);
+//
+
+void printPathModifications(vector<string*>* path);
+//
+
+int find_positional_difference(string* current, string* next);
 //
 
 void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry*>* deck, vector<string*>* dictionary, DictionaryEntry* current, int i);
@@ -54,16 +62,10 @@ int main(int argc, char *argv[])
 	// Uncomment to redirect stdin to take input from file
 //	ifstream arq(getenv("MYARQ"));
 //	cin.rdbuf(arq.rdbuf());
-	// New method coming up with on my own
-//	streambuf *ifbuf;
-//	ifstream dict;
-//	dict.open("dictionary-xlarge-234936.txt");
-//	ifbuf = dict.rdbuf();
-//	cin.rdbuf(ifbuf);
 	//
 
 	//valgrind will report memory leak when sync_with_stdio is false
-//	ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	//
 
 	string begin;
@@ -78,13 +80,32 @@ int main(int argc, char *argv[])
 
 	dictionary = storeDictionaryInDataStructure(&begin, &end);
 
-	path = findLettermansPath(rout, modify, &begin, &end, dictionary);
-
-	cout << "Words in morph: " << (int)path->size() << "\n";
-
-	for (int i = (int)path->size() - 1; i >= 0; i--) {
-		cout << *path->at(i) << "\n";
+	if (begin == end) {
+		path = new vector<string*>(1, &begin);
 	}
+	else {
+		path = findLettermansPath(rout, modify, &begin, &end, dictionary);
+	}
+
+	////////////////////////////////////////////////////////////
+//	ostringstream ss;
+//	
+//	ss << "Words in morph: " << (int)path->size() << "\n";
+//	
+//	for (int i = (int)path->size() - 1; i >= 0; i--) {
+//		ss << *path->at(i) << "\n";
+//	}
+//	
+//	cout << ss.str();
+	////////////////////////////////////////////////////////////
+
+	if (outp == MOUT) {
+		printPathModifications(path);
+	}
+	else {
+		printPathWords(path);
+	}
+
 
 	for (unsigned int i = 0; i < dictionary->size(); i++) {
 		if (dictionary->at(i)) {
@@ -100,10 +121,6 @@ int main(int argc, char *argv[])
 
 	delete dictionary; dictionary = NULL;
 	delete path; path = NULL;
-
-	// Comment this out when not using xcode
-//	dict.close();
-	//
 
 	return 0;
 }
@@ -251,7 +268,7 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 			if (begin->compare(entry) == 0) {
 				beginIsInDictionary = true;
 			}
-			else if (end->compare(entry) == 0) {
+			if (end->compare(entry) == 0) {
 				endIsInDictionary = true;
 			}
 
@@ -350,7 +367,7 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 
-		for (unsigned int f = 0; f < used_entries->size(); f++) {
+		for (int f = 0; f < (int)used_entries->size(); f++) {
 			if (*backtrack == *begin) {
 				path->push_back(begin);
 				
@@ -367,17 +384,15 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 
 				f = 0;
 			}
-
-
 		}
 	}
 
-	for (unsigned int d = deck->size(); d > 0; d--) {
+	for (int d = (int)deck->size(); d > 0; d--) {
 		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 	}
 
-	for (unsigned int u = used_entries->size(); u > 0; u--) {
+	for (int u = (int)used_entries->size(); u > 0; u--) {
 		delete used_entries->back(); used_entries->back() = NULL;
 		used_entries->pop_back();
 	}
@@ -435,11 +450,71 @@ bool checkIfLengthMorph(string* one, string* two)
 	return false;
 }
 
-void printPath(vector<string*>*)
+void printPathWords(vector<string*>* path)
 {
+	ostringstream ss;
+
+	ss << "Words in morph: " << (int)path->size() << "\n";
 	
+	for (int i = (int)path->size() - 1; i >= 0; i--) {
+		ss << *path->at(i) << "\n";
+	}
+
+	cout << ss.str();
 
 	return;
+}
+
+void printPathModifications(vector<string*>* path)
+{
+	ostringstream ss;
+
+	ss << "Words in morph: " << (int)path->size() << "\n";
+
+	ss << *path->back() << "\n";
+
+	for (int i = (int)path->size() - 1; i > 0; i--) {
+		if (path->at(i)->length() == path->at(i - 1)->length()) {
+			int position = find_positional_difference(path->at(i), path->at(i - 1));
+
+			ss << "c," << position << "," << path->at(i - 1)->at(position) << "\n";
+		}
+		else if (path->at(i)->length() > path->at(i - 1)->length()) {
+			ss << "d," << find_positional_difference(path->at(i), path->at(i - 1)) << "\n";
+		}
+		else {
+			int position = find_positional_difference(path->at(i), path->at(i - 1));
+
+			ss << "i," << position << "," << path->at(i - 1)->at(position) << "\n";
+		}
+	}
+
+	cout << ss.str();
+
+	return;
+}
+
+int find_positional_difference(string* current, string* next)
+{
+	int position = -1;
+
+	for (int i = 0; i < current->length(); i++) {
+		if (i == next->length()) {
+			position = i;
+			break;
+		}
+
+		if (current->at(i) != next->at(i)) {
+			position = i;
+			break;
+		}
+	}
+
+	if (position == -1) {
+		position = (int)next->length() - 1;
+	}
+
+	return position;
 }
 
 
@@ -449,9 +524,6 @@ void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry*>* deck,
 	
 	delete dictionary->at(i); dictionary->at(i) = NULL;
 	dictionary->erase(dictionary->begin() + i);
-
-//	delete deck->front(); deck->front() = NULL;
-//	deck->pop_front();
 
 	return;
 }

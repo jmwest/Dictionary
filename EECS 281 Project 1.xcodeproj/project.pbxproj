@@ -29,9 +29,8 @@
 		279290D41A6C7F4E0022B943 /* dictionary-medium-4343.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-medium-4343.txt"; sourceTree = "<group>"; };
 		279290D51A6C7F4E0022B943 /* dictionary-short-8.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-short-8.txt"; sourceTree = "<group>"; };
 		279290D61A6C7F4E0022B943 /* dictionary-short-20.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-short-20.txt"; sourceTree = "<group>"; };
-		27B647CB1A65965900785596 /* EECS 281 Project 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 1"; sourceTree = BUILT_PRODUCTS_DIR; };
-		27DA5FD01A6C7BE500418F68 /* dictionary-xlarge.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-xlarge.txt"; sourceTree = "<group>"; };
-		27DA5FD21A6C7D0400418F68 /* dictionary-xlarge-234936.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-xlarge-234936.txt"; sourceTree = "<group>"; };
+		27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 1"; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CA80851A6EC7FF002FEA8C /* dictionary-xlarge-234936.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-xlarge-234936.txt"; sourceTree = "<group>"; };
 		27DB61D61A686A8B007BC3D3 /* DictionaryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryEntry.h; sourceTree = SOURCE_ROOT; };
 		27E55F311A6ACBB700A4F816 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -51,21 +50,13 @@
 			isa = PBXGroup;
 			children = (
 				27B647CD1A65965900785596 /* EECS 281 Project 1 */,
-				27DA5FD11A6C7C7800418F68 /* Products */,
+				27CA80851A6EC7FF002FEA8C /* dictionary-xlarge-234936.txt */,
 				279290D31A6C7F4E0022B943 /* dictionary-large-79340.txt */,
 				279290D41A6C7F4E0022B943 /* dictionary-medium-4343.txt */,
 				279290D51A6C7F4E0022B943 /* dictionary-short-8.txt */,
 				279290D61A6C7F4E0022B943 /* dictionary-short-20.txt */,
+				27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */,
 			);
-			sourceTree = "<group>";
-		};
-		27B647CC1A65965900785596 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				27B647CB1A65965900785596 /* EECS 281 Project 1 */,
-				27DA5FD21A6C7D0400418F68 /* dictionary-xlarge-234936.txt */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		27B647CD1A65965900785596 /* EECS 281 Project 1 */ = {
@@ -77,15 +68,6 @@
 				27E55F311A6ACBB700A4F816 /* Makefile */,
 			);
 			path = "EECS 281 Project 1";
-			sourceTree = "<group>";
-		};
-		27DA5FD11A6C7C7800418F68 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				27B647CC1A65965900785596 /* Products */,
-				27DA5FD01A6C7BE500418F68 /* dictionary-xlarge.txt */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -105,7 +87,7 @@
 			);
 			name = "EECS 281 Project 1";
 			productName = "EECS 281 Project 1";
-			productReference = 27B647CB1A65965900785596 /* EECS 281 Project 1 */;
+			productReference = 27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -130,7 +112,7 @@
 				en,
 			);
 			mainGroup = 27B647C21A65965900785596;
-			productRefGroup = 27B647CC1A65965900785596 /* Products */;
+			productRefGroup = 27B647C21A65965900785596;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
