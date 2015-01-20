@@ -19,10 +19,6 @@
 using namespace std;
 
 struct DictionaryEntry {
-private:
-	string* word;
-	string* previous;
-
 public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
@@ -34,6 +30,10 @@ public:
 
 	string* getWord() const;
 	string* getPrevious() const;
+
+private:
+	string* word;
+	string* previous;
 };
 
 DictionaryEntry::DictionaryEntry()
@@ -67,21 +67,21 @@ void DictionaryEntry::setPrevious(string* previous_in)
 
 string* DictionaryEntry::getWord() const
 {
-	return new string(*word);
+	return word;
 }
 
 string* DictionaryEntry::getPrevious() const
 {
-	return new string(*previous);
+	return previous;
 }
 
 DictionaryEntry::~DictionaryEntry()
 {
-	if (word != NULL) {
+	if (word) {
 		delete word; word = NULL;
 	}
 
-	if (previous != NULL) {
+	if (previous) {
 		delete previous; previous = NULL;
 	}
 }

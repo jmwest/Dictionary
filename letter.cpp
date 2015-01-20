@@ -44,6 +44,10 @@ bool checkIfLengthMorph(string* one, string* two);
 //
 
 void printPath(vector<string*>*);
+//
+
+void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry*>* deck, vector<string*>* dictionary, DictionaryEntry* current, int i);
+//
 
 int main(int argc, char *argv[])
 {
@@ -83,13 +87,13 @@ int main(int argc, char *argv[])
 	}
 
 	for (unsigned int i = 0; i < dictionary->size(); i++) {
-		if (dictionary->at(i) != NULL) {
+		if (dictionary->at(i)) {
 			delete dictionary->at(i); dictionary->at(i) = NULL;
 		}
 	}
 
 	for (unsigned int i = 1; i < path->size() - 1; i++) {
-		if (path->at(i) != NULL) {
+		if (path->at(i)) {
 			delete path->at(i); path->at(i) = NULL;
 		}
 	}
@@ -276,74 +280,59 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 
 	deque<DictionaryEntry*>* deck = new deque<DictionaryEntry*>();
 
-	DictionaryEntry* first_entry;
-
 	DictionaryEntry* current_entry;
 
+	deck->push_front(new DictionaryEntry(begin));
+
 	for (unsigned int i = 0; i < dictionary->size(); i++) {
-		if (dictionary->at(i)->compare(*begin) == 0) {
-			first_entry = new DictionaryEntry(dictionary->at(i));
+		if (*dictionary->at(i) == *begin) {
 			delete dictionary->at(i); dictionary->at(i) = NULL;
 			dictionary->erase(dictionary->begin() + i);
+
+			break;
 		}
 	}
-	deck->push_front(first_entry);
-	first_entry = NULL;
 
 	bool reachedTheEnd = false;
 
 	while ((deck->size() != 0) and !reachedTheEnd) {
 		if (rout == STACK) {
 			current_entry = deck->front();
+			deck->front() = NULL;
 			deck->pop_front();
 		}
 		else {
 			current_entry = deck->back();
+			deck->back() = NULL;
 			deck->pop_back();
 		}
 
 		for (unsigned int i = 0; i < dictionary->size(); i++) {
 			if (modify == BOTH) {
-				if (checkIfChangeMorph(current_entry->getWord(), dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
+				if (checkIfChangeMorph(current_entry->getWord(), dictionary->at(i))
+					or checkIfLengthMorph(current_entry->getWord(), dictionary->at(i))) {
+					add_word_to_deque_from_dictionary_at_index_i(deck, dictionary, current_entry, i);
 
-					deck->push_front(new_entry);
-					dictionary->at(i) = NULL;
-					dictionary->erase(dictionary->begin() + i);
-					i--;
-				}
-				else if (checkIfLengthMorph(current_entry->getWord(), dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
-
-					deck->push_front(new_entry);
-					dictionary->at(i) = NULL;
-					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
 			}
 			else if (modify == LENGTH) {
 				if (checkIfLengthMorph(current_entry->getWord(), dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
+					add_word_to_deque_from_dictionary_at_index_i(deck, dictionary, current_entry, i);
 
-					deck->push_front(new_entry);
-					dictionary->at(i) = NULL;
-					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
 			}
 			else if (modify == CHANGE) {
 				if (checkIfChangeMorph(current_entry->getWord(), dictionary->at(i))) {
-					DictionaryEntry* new_entry = new DictionaryEntry(dictionary->at(i), current_entry->getWord());
+					add_word_to_deque_from_dictionary_at_index_i(deck, dictionary, current_entry, i);
 
-					deck->push_front(new_entry);
-					dictionary->at(i) = NULL;
-					dictionary->erase(dictionary->begin() + i);
 					i--;
 				}
 			}
 
 			if (deck->size() != 0) {
-				if (deck->front()->getWord()->compare(*end) == 0) {
+				if (*deck->front()->getWord() == *end) {
 					reachedTheEnd = true;
 					break;
 				}
@@ -354,20 +343,18 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 	}
 
 	if (deck->size() != 0) {
-		string* backtrack = deck->front()->getPrevious();
+		string* backtrack = new string(*deck->front()->getPrevious());
 
 		path->push_back(end);
 
-//		deck->front()->word = NULL; deck->front()->previous = NULL;
 		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 
 		for (unsigned int f = 0; f < used_entries->size(); f++) {
-			if (backtrack->compare(*used_entries->at(f)->getWord()) == 0) {
+			if (*backtrack == *used_entries->at(f)->getWord()) {
 				path->push_back(backtrack);
-				backtrack = used_entries->at(f)->getPrevious();
+				backtrack = new string(*used_entries->at(f)->getPrevious());
 
-//				used_entries->at(f)->word = NULL; used_entries->at(f)->previous = NULL;
 				delete used_entries->at(f); used_entries->at(f) = NULL;
 				used_entries->erase(used_entries->begin() + f);
 
@@ -376,30 +363,20 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 
 			if (backtrack->compare(*begin) == 0) {
 				path->push_back(begin);
+
+				delete backtrack; backtrack = NULL;
 				break;
 			}
 		}
 	}
 
-	for (unsigned int d = 0; d < deck->size(); d++) {
-//		if (deck->front()-> != NULL) {
-//			delete deck->front()->word; deck->front()->word = NULL;
-//		}
-//		if (deck->front()->previous != NULL) {
-//			delete deck->front()->previous; deck->front()->previous = NULL;
-//		}
+	for (unsigned int d = deck->size(); d > 0; d--) {
 		delete deck->front(); deck->front() = NULL;
 		deck->pop_front();
 	}
 
-	for (unsigned int u = 0; u < used_entries->size(); u++) {
-//		if (used_entries->back()->word != NULL) {
-//			delete used_entries->back()->word; used_entries->back()->word = NULL;
-//		}
-//		if (used_entries->back()->previous != NULL) {
-//			delete used_entries->back()->previous; used_entries->back()->previous = NULL;
-//		}
-		delete used_entries->back();
+	for (unsigned int u = used_entries->size(); u > 0; u--) {
+		delete used_entries->back(); used_entries->back() = NULL;
 		used_entries->pop_back();
 	}
 
@@ -411,18 +388,20 @@ vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string*
 
 bool checkIfChangeMorph(string* one, string* two)
 {
-	int discrepancyNumber = 0;
-
 	if (one->size() == two->size()) {
+		int discrepancyNumber = 0;
+
 		for (unsigned int i = 0; i < one->size(); i++) {
 			if (one->at(i) != two->at(i)) {
 				discrepancyNumber++;
 			}
+
+			if (discrepancyNumber >= 2) {
+				return false;
+			}
 		}
 
-		if (discrepancyNumber <= 1) {
-			return true;
-		}
+		return (discrepancyNumber <=1);
 	}
 
 	return false;
@@ -434,9 +413,9 @@ bool checkIfLengthMorph(string* one, string* two)
 		return checkIfLengthMorph(two, one);
 	}
 
-	int discrepancyNumber = 0;
-
 	if ((two->size() - one->size()) == 1) {
+		int discrepancyNumber = 0;
+
 		for (int i = 0; i < ((int)(one->size() + two->size()) / 2); i++) {
 			if (one->at(i) != two->at(i + discrepancyNumber)) {
 				discrepancyNumber++;
@@ -448,11 +427,29 @@ bool checkIfLengthMorph(string* one, string* two)
 			}
 		}
 
-		// don't need the check?
-		if (discrepancyNumber <= 1) {
-			return true;
-		}
+		return (discrepancyNumber <=1);
 	}
 
 	return false;
+}
+
+void printPath(vector<string*>*)
+{
+	
+
+	return;
+}
+
+
+void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry*>* deck, vector<string*>* dictionary, DictionaryEntry* current, int i)
+{
+	deck->push_front(new DictionaryEntry(dictionary->at(i), current->getWord()));
+	
+	delete dictionary->at(i); dictionary->at(i) = NULL;
+	dictionary->erase(dictionary->begin() + i);
+
+//	delete deck->front(); deck->front() = NULL;
+//	deck->pop_front();
+
+	return;
 }
