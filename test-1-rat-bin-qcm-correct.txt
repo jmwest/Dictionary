@@ -1,0 +1,5 @@
+Words in morph: 4
+rat
+c,2,n
+c,0,b
+c,1,i
