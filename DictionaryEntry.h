@@ -28,62 +28,55 @@ public:
 	void setWord(string* word_in);
 	void setPrevious(string* previous_in);
 
-	string* getWord() const;
-	string* getPrevious() const;
+	string* getWord();
+	string* getPrevious();
 
 private:
-	string* word;
-	string* previous;
+	string word;
+	string previous;
 };
 
 DictionaryEntry::DictionaryEntry()
-{
-	word = NULL;
-	previous = NULL;
-}
+{}
 
 DictionaryEntry::DictionaryEntry(string* word_entry)
 {
-	word = new string(*word_entry);
-	previous = NULL;
+	word = *word_entry;
 }
 
 DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
-: word(word_entry), previous(previous_entry)
-{
-	word = new string(*word_entry);
-	previous = new string(*previous_entry);
-}
+: word(*word_entry), previous(*previous_entry)
+{}
 
 void DictionaryEntry::setWord(string* word_in)
 {
-	word = new string(*word_in);
+	word = *word_in;
 }
 
 void DictionaryEntry::setPrevious(string* previous_in)
 {
-	previous = new string(*previous_in);
+	previous = *previous_in;
 }
 
-string* DictionaryEntry::getWord() const
+string* DictionaryEntry::getWord()
 {
-	return word;
+	return &word;
 }
 
-string* DictionaryEntry::getPrevious() const
+string* DictionaryEntry::getPrevious()
 {
-	return previous;
+	return &previous;
 }
 
 DictionaryEntry::~DictionaryEntry()
 {
-	if (word) {
-		delete word; word = NULL;
-	}
-
-	if (previous) {
-		delete previous; previous = NULL;
-	}
+//	if (word) {
+//		delete word; word = NULL;
+//	}
+//
+//	if (previous) {
+//		delete previous; previous = NULL;
+//	}
 }
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
