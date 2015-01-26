@@ -31,10 +31,10 @@ enum Output {DEFAULTOUTPUT, WOUT, MOUT};
 void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output);
 //
 
-vector<string*>* storeDictionaryInDataStructure(string* begin, string* end);
+vector<string>* storeDictionaryInDataStructure(string* begin, string* end);
 //
 
-vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string*>* dictionary);
+vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary);
 // Returns a pointer to a vector of string pointers that contains
 //		the path from begin to end through the dictionary.
 // ->at(0) contains *end, and ->back() contains *begin
@@ -45,16 +45,16 @@ bool checkIfChangeMorph(string* one, string* two);
 bool checkIfLengthMorph(string* one, string* two);
 //
 
-void printPathWords(vector<string*>* path);
+void printPathWords(vector<string>* path);
 //
 
-void printPathModifications(vector<string*>* path);
+void printPathModifications(vector<string>* path);
 //
 
 int find_positional_difference(string* current, string* next);
 //
 
-void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry*>* deck, vector<string*>* dictionary, DictionaryEntry* current, int i);
+void add_word_to_deque_from_dictionary_at_index_i(deque<DictionaryEntry>* deck, vector<string>* dictionary, DictionaryEntry* current, int i);
 //
 
 int main(int argc, char *argv[])
@@ -70,18 +70,18 @@ int main(int argc, char *argv[])
 
 	string begin;
 	string end;
-	vector<string*>* dictionary;
-	vector<string*>* path;
+	vector<string>* dictionary;
+	vector<string>* path;
 	Routing rout = noROUT;
 	Modification modify = noMOD;
 	Output outp = DEFAULTOUTPUT;
-
+	string * ptr = new string("hello");
 	parseCommandLineInput(argc, argv, begin, end, rout, modify, outp);
 
 	dictionary = storeDictionaryInDataStructure(&begin, &end);
-
+	cerr << sizeof(ptr) << endl;
 	if (begin == end) {
-		path = new vector<string*>(1, &begin);
+		path = new vector<string>(1, begin);
 	}
 	else {
 		path = findLettermansPath(rout, modify, &begin, &end, dictionary);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	if (path->size() == 0) {
 		ostringstream ss;
 
-		ss << "No solution.";
+		ss << "No solution.\n";
 
 		cout << ss.str();
 	}
@@ -103,17 +103,17 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (unsigned int i = 0; i < dictionary->size(); i++) {
-		if (dictionary->at(i)) {
-			delete dictionary->at(i); dictionary->at(i) = NULL;
-		}
-	}
+//	for (unsigned int i = 0; i < dictionary->size(); i++) {
+//		if (dictionary->at(i)) {
+//			delete dictionary->at(i); dictionary->at(i) = NULL;
+//		}
+//	}
 
-	for (int i = 1; i < (int)path->size() - 1; i++) {
-		if (path->at(i)) {
-			delete path->at(i); path->at(i) = NULL;
-		}
-	}
+//	for (int i = 1; i < (int)path->size() - 1; i++) {
+//		if (path->at(i)) {
+//			delete path->at(i); path->at(i) = NULL;
+//		}
+//	}
 
 	delete dictionary; dictionary = NULL;
 	delete path; path = NULL;
@@ -230,7 +230,7 @@ void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end,
 	}
 }
 
-vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
+vector<string>* storeDictionaryInDataStructure(string* begin, string* end)
 {
 	string size_in;
 	int size = 0;
@@ -242,7 +242,7 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 
 	size = atoi(size_in.c_str());
 
-	vector<string*>* dictionary = new vector<string*>(size);
+	vector<string>* dictionary = new vector<string>(size);
 
 	for (int count = 0; getline(cin, entry) and (count < size);) {
 		if (entry.length() == 0) {
@@ -268,7 +268,7 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 				endIsInDictionary = true;
 			}
 
-			dictionary->at(count) = new string(entry);
+			dictionary->at(count) = entry;
 
 			count++;
 		}
@@ -286,14 +286,14 @@ vector<string*>* storeDictionaryInDataStructure(string* begin, string* end)
 	return dictionary;
 }
 
-vector<string*>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string*>* dictionary)
+vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, vector<string>* dictionary)
 {
-	vector<string*>* path = new vector<string*>();
-	vector<DictionaryEntry*>* used_entries = new vector<DictionaryEntry*>();
+	vector<string>* path = new vector<string>();
+	vector<DictionaryEntry>* used_entries = new vector<DictionaryEntry>();
 
-	deque<DictionaryEntry*>* deck = new deque<DictionaryEntry*>();
+	deque<DictionaryEntry>* deck = new deque<DictionaryEntry>();
 
-	DictionaryEntry* current_entry;
+	DictionaryEntry current_entry;
 
 	deck->push_front(new DictionaryEntry(begin));
 

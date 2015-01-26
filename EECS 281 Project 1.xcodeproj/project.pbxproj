@@ -23,6 +23,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		270915C11A703A320007E7BA /* test-4-Morphing-Morphine-qclm-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-4-Morphing-Morphine-qclm-correct.txt"; sourceTree = "<group>"; };
+		270915C21A703A320007E7BA /* test-4-Morphing-Morphine-qclm.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-4-Morphing-Morphine-qclm.txt"; sourceTree = "<group>"; };
+		270915C31A703A320007E7BA /* test-6-sea-nifty-sclw-correct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-6-sea-nifty-sclw-correct.txt"; sourceTree = "<group>"; };
+		270915C41A703A320007E7BA /* test-6-sea-nifty-sclw.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-6-sea-nifty-sclw.txt"; sourceTree = "<group>"; };
 		277B844F1A6596C8003B1487 /* letter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = letter.cpp; sourceTree = SOURCE_ROOT; };
 		277B84501A6596C8003B1487 /* letter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = letter.h; sourceTree = SOURCE_ROOT; };
 		279290D31A6C7F4E0022B943 /* dictionary-large-79340.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-large-79340.txt"; sourceTree = "<group>"; };
@@ -94,8 +98,12 @@
 				27B8AF4C1A6EFFD600DBDAA8 /* test-2-sea-nifty-sclw-correct.txt */,
 				27B8AF471A6EF47400DBDAA8 /* test-3-aardvark-aardvark-slm.txt */,
 				27B8AF4D1A6F057F00DBDAA8 /* test-3-aardvark-aardvark-slm-correct.txt */,
+				270915C21A703A320007E7BA /* test-4-Morphing-Morphine-qclm.txt */,
+				270915C11A703A320007E7BA /* test-4-Morphing-Morphine-qclm-correct.txt */,
 				27B8AF491A6EF47400DBDAA8 /* test-5-mad-Made-qclw.txt */,
 				27B8AF4F1A6F0A5E00DBDAA8 /* test-5-mad-Made-qclw-correct.txt */,
+				270915C41A703A320007E7BA /* test-6-sea-nifty-sclw.txt */,
+				270915C31A703A320007E7BA /* test-6-sea-nifty-sclw-correct.txt */,
 			);
 			name = Tests;
 			sourceTree = "<group>";

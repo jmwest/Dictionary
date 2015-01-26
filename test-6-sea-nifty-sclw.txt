@@ -1,0 +1,23 @@
+20
+// 20 word dictionary from sea to nifty.
+// Words are already in correct order
+sea
+see
+bee
+be
+he
+her
+heir
+hair
+air
+aid
+tad
+at
+art
+fart
+fort
+forth
+firth
+fifth
+fifty
+nifty
