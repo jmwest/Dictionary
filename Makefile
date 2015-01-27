@@ -5,7 +5,7 @@ LD_RUN_PATH := /usr/um/gcc­4.8.2/lib64
 
 FLAGS = -Wall -Wextra -pedantic -O3 -Wvla -std=c++11
 
-letter : letter.cpp
+letter : letter.cpp letter.h DictionaryEntry.h
 	g++ $(FLAGS) letter.cpp -o letter
 
 test_all : test1 test2 test3 test4 test5 test6
@@ -53,6 +53,10 @@ mem_check5 : letter
 
 mem_check6 : letter
 valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./letter -s -c -l -b sea -e nifty -o W < test-6-sea-nifty-sclw.txt
+
+Prof : letter.cpp
+	g++ letter.cpp $(FLAGS) -pg -o letter-prof
+	gprof -p -q ./letter-prof -scl -b inky -e bard < dictionary-xlarge-234936.txt > output.txt
 
 clean :
 	rm letter *.o

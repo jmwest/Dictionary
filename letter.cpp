@@ -258,10 +258,10 @@ list<string>* storeDictionaryInDataStructure(string* begin, string* end)
 		}
 
 		if (entry.at(0) != '/') {
-			if (begin->compare(entry) == 0) {
+			if (*begin == entry) {
 				beginIsInDictionary = true;
 			}
-			if (end->compare(entry) == 0) {
+			if (*end == entry) {
 				endIsInDictionary = true;
 			}
 
@@ -317,42 +317,45 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 		}
 
 		for (list<string>::iterator it = dictionary->begin(); it != dictionary->end(); ++it) {
-			if (modify == BOTH) {
-				if (checkIfChangeMorph(current_entry.getWord(), &(*it))
-					or checkIfLengthMorph(current_entry.getWord(), &(*it))) {
-					add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
+			if (((int)(current_entry.getWord()->length() - it->length()) <= 1)
+				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)){
+				if (modify == BOTH) {
+					if (checkIfChangeMorph(current_entry.getWord(), &(*it))
+						or checkIfLengthMorph(current_entry.getWord(), &(*it))) {
+						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
-					list<string>::iterator invalidated_it = it;
-					it--;
+						list<string>::iterator invalidated_it = it;
+						it--;
 
-					dictionary->erase(invalidated_it);
+						dictionary->erase(invalidated_it);
+					}
 				}
-			}
-			else if (modify == LENGTH) {
-				if (checkIfLengthMorph(current_entry.getWord(), &(*it))) {
-					add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
+				else if (modify == LENGTH) {
+					if (checkIfLengthMorph(current_entry.getWord(), &(*it))) {
+						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
-					list<string>::iterator invalidated_it = it;
-					it--;
-					
-					dictionary->erase(invalidated_it);
+						list<string>::iterator invalidated_it = it;
+						it--;
+						
+						dictionary->erase(invalidated_it);
+					}
 				}
-			}
-			else if (modify == CHANGE) {
-				if (checkIfChangeMorph(current_entry.getWord(), &(*it))) {
-					add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
+				else if (modify == CHANGE) {
+					if (checkIfChangeMorph(current_entry.getWord(), &(*it))) {
+						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
-					list<string>::iterator invalidated_it = it;
-					it--;
-					
-					dictionary->erase(invalidated_it);
+						list<string>::iterator invalidated_it = it;
+						it--;
+						
+						dictionary->erase(invalidated_it);
+					}
 				}
-			}
 
-			if (deck->size() != 0) {
-				if (*deck->front().getWord() == *end) {
-					reachedTheEnd = true;
-					break;
+				if (deck->size() != 0) {
+					if (*deck->front().getWord() == *end) {
+						reachedTheEnd = true;
+						break;
+					}
 				}
 			}
 		}
@@ -389,16 +392,6 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 		}
 	}
 
-//	for (int d = (int)deck->size(); d > 0; d--) {
-//		delete deck->front(); deck->front() = NULL;
-//		deck->pop_front();
-//	}
-//
-//	for (int u = (int)used_entries->size(); u > 0; u--) {
-//		delete used_entries->back(); used_entries->back() = NULL;
-//		used_entries->pop_back();
-//	}
-
 	delete deck; deck = NULL;
 	delete used_entries; used_entries = NULL;
 
@@ -428,11 +421,12 @@ bool checkIfChangeMorph(string* one, string* two)
 
 bool checkIfLengthMorph(string* one, string* two)
 {
-	if (one->size() > two->size()) {
-		return checkIfLengthMorph(two, one);
-	}
+	if (((two->size() - one->size()) == 1) or ((one->size() - two->size()) == 1)) {
 
-	if ((two->size() - one->size()) == 1) {
+		if (one->size() > two->size()) {
+			return checkIfLengthMorph(two, one);
+		}
+
 		int discrepancyNumber = 0;
 
 		for (int i = 0; i < ((int)(one->size() + two->size()) / 2); i++) {
