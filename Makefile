@@ -8,13 +8,14 @@ FLAGS = -Wall -Wextra -pedantic -O3 -Wvla -std=c++11
 letter : letter.cpp letter.h DictionaryEntry.h
 	g++ $(FLAGS) letter.cpp -o letter
 
-test_all : test1 test2 test3 test4 test5 test6
+test_all : test1 test2 test3 test4 test5 test6 test7
 	diff -q test1.out test-1-rat-bin-qcm-correct.txt
 	diff -q test2.out test-2-sea-nifty-sclw-correct.txt
 	diff -q test3.out test-3-aardvark-aardvark-slm-correct.txt
 	diff -q test4.out test-4-Morphing-Morphine-qclm-correct.txt
 	diff -q test5.out test-5-mad-Made-qclw-correct.txt
 	diff -q test6.out test-6-sea-nifty-sclw-correct.txt
+	diff -q test7.out test-7-hat-match-qlw-correct.txt
 
 mem_check_all : mem_check1 mem_check2 mem_check3 mem_check4 mem_check5 mem_check6
 
@@ -34,7 +35,10 @@ test5 : letter
 	./letter -q -c -l -b mad -e Made -o W < test-5-mad-Made-qclw.txt > test5.out
 
 test6 : letter
-	./letter -s -c -l -b sea -e nifty -o W < test-6-sea-nifty-sclw.txt >test6.out
+	./letter -s -c -l -b sea -e nifty -o W < test-6-sea-nifty-sclw.txt > test6.out
+
+test7 : letter
+	./letter -q -l -b hat -e match -o W < test-7-hat-match-qlw.txt > test7.out
 
 mem_check1 : letter
 	valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./letter -q -c -b rat -e bin -o M < test-1-rat-bin-qcm.txt

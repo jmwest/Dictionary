@@ -48,6 +48,8 @@
 		27B8AF551A6F0F4C00DBDAA8 /* test5.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test5.out; sourceTree = "<group>"; };
 		27CA80831A6EC7E8002FEA8C /* EECS 281 Project 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27CA80851A6EC7FF002FEA8C /* dictionary-xlarge-234936.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dictionary-xlarge-234936.txt"; sourceTree = "<group>"; };
+		27DAA59E1A7D65DA00CE74F7 /* test6.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test6.out; sourceTree = "<group>"; };
+		27DAA59F1A7D65DA00CE74F7 /* test7.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test7.out; sourceTree = "<group>"; };
 		27DB61D61A686A8B007BC3D3 /* DictionaryEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DictionaryEntry.h; sourceTree = SOURCE_ROOT; };
 		27E55F311A6ACBB700A4F816 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -116,6 +118,8 @@
 				27B8AF531A6F0F4C00DBDAA8 /* test3.out */,
 				27B8AF541A6F0F4C00DBDAA8 /* test4.out */,
 				27B8AF551A6F0F4C00DBDAA8 /* test5.out */,
+				27DAA59E1A7D65DA00CE74F7 /* test6.out */,
+				27DAA59F1A7D65DA00CE74F7 /* test7.out */,
 			);
 			name = Out;
 			sourceTree = "<group>";

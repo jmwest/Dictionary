@@ -29,7 +29,7 @@ enum Output {DEFAULTOUTPUT, WOUT, MOUT};
 void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output);
 //
 
-list<string>* storeDictionaryInDataStructure(string* begin, string* end);
+list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modification &modify);
 //
 
 vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, list<string>* dictionary);
@@ -55,8 +55,7 @@ int find_positional_difference(string* current, string* next);
 void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry, DictionaryEntry* current);
 //
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	// Uncomment to redirect stdin to take input from file
 //	ifstream arq(getenv("MYARQ"));
 //	cin.rdbuf(arq.rdbuf());
@@ -76,7 +75,7 @@ int main(int argc, char *argv[])
 
 	parseCommandLineInput(argc, argv, begin, end, rout, modify, outp);
 
-	dictionary = storeDictionaryInDataStructure(&begin, &end);
+	dictionary = storeDictionaryInDataStructure(&begin, &end, modify);
 
 	if (begin == end) {
 		path = new vector<string>(1, begin);
@@ -101,26 +100,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-//	for (unsigned int i = 0; i < dictionary->size(); i++) {
-//		if (dictionary->at(i)) {
-//			delete dictionary->at(i); dictionary->at(i) = NULL;
-//		}
-//	}
-
-//	for (int i = 1; i < (int)path->size() - 1; i++) {
-//		if (path->at(i)) {
-//			delete path->at(i); path->at(i) = NULL;
-//		}
-//	}
- 
 	delete dictionary; dictionary = NULL;
 	delete path; path = NULL;
 
 	return 0;
 }
 
-void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output)
-{
+void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output) {
 	static struct option longopts[] = {
 		{"stack",	no_argument,		NULL, 's'},
 		{"queue",	no_argument,		NULL, 'q'},
@@ -228,8 +214,9 @@ void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end,
 	}
 }
 
-list<string>* storeDictionaryInDataStructure(string* begin, string* end)
-{
+list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modification &modify) {
+	list<string>* dictionary;
+
 	string size_in;
 	int size = 0;
 	string entry;
@@ -240,34 +227,68 @@ list<string>* storeDictionaryInDataStructure(string* begin, string* end)
 
 	size = atoi(size_in.c_str());
 
-	list<string>* dictionary = new list<string>(size);
+	if (modify == CHANGE) {
+		dictionary = new list<string>();
 
-	for (list<string>::iterator it = dictionary->begin(); getline(cin, entry) and (it != dictionary->end());) {
-		if (entry.length() == 0) {
-			break;
-		}
-		else if (entry.at(0) == ' ') {
-			break;
-		}
-		else if (entry.at(0) == '\n') {
-			break;
-		}
-
-		if (entry.at(entry.size() - 1) == '\n') {
-			entry.erase(entry.begin() + entry.size() - 1);
-		}
-
-		if (entry.at(0) != '/') {
-			if (*begin == entry) {
-				beginIsInDictionary = true;
+		while (getline(cin, entry)) {
+			if (entry.length() == 0) {
+				break;
 			}
-			if (*end == entry) {
-				endIsInDictionary = true;
+			else if (entry.at(0) == ' ') {
+				break;
+			}
+			else if (entry.at(0) == '\n') {
+				break;
+			}
+			
+			if (entry.at(entry.size() - 1) == '\n') {
+				entry.erase(entry.begin() + entry.size() - 1);
+			}
+			
+			if (entry.at(0) != '/') {
+				if (*begin == entry) {
+					beginIsInDictionary = true;
+				}
+				if (*end == entry) {
+					endIsInDictionary = true;
+				}
+
+				if (entry.length() == begin->length()) {
+					dictionary->push_back(entry);
+				}
+			}
+		}
+	}
+	else {
+		dictionary = new list<string>(size);
+
+		for (list<string>::iterator it = dictionary->begin(); getline(cin, entry) and (it != dictionary->end());) {
+			if (entry.length() == 0) {
+				break;
+			}
+			else if (entry.at(0) == ' ') {
+				break;
+			}
+			else if (entry.at(0) == '\n') {
+				break;
 			}
 
-			*it = entry;
+			if (entry.at(entry.size() - 1) == '\n') {
+				entry.erase(entry.begin() + entry.size() - 1);
+			}
 
-			++it;
+			if (entry.at(0) != '/') {
+				if (*begin == entry) {
+					beginIsInDictionary = true;
+				}
+				if (*end == entry) {
+					endIsInDictionary = true;
+				}
+
+				*it = entry;
+
+				++it;
+			}
 		}
 	}
 
@@ -283,8 +304,7 @@ list<string>* storeDictionaryInDataStructure(string* begin, string* end)
 	return dictionary;
 }
 
-vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, list<string>* dictionary)
-{
+vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, list<string>* dictionary) {
 	vector<string>* path = new vector<string>();
 	list<DictionaryEntry>* used_entries = new list<DictionaryEntry>();
 
@@ -399,8 +419,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 	return path;
 }
 
-bool checkIfChangeMorph(string* one, string* two)
-{
+bool checkIfChangeMorph(string* one, string* two) {
 	if (one->size() == two->size()) {
 		int discrepancyNumber = 0;
 
@@ -420,8 +439,7 @@ bool checkIfChangeMorph(string* one, string* two)
 	return false;
 }
 
-bool checkIfLengthMorph(string* one, string* two)
-{
+bool checkIfLengthMorph(string* one, string* two) {
 	if (((two->size() - one->size()) == 1) or ((one->size() - two->size()) == 1)) {
 
 		if (one->size() > two->size()) {
@@ -447,8 +465,7 @@ bool checkIfLengthMorph(string* one, string* two)
 	return false;
 }
 
-void printPathWords(vector<string>* path)
-{
+void printPathWords(vector<string>* path) {
 	ostringstream ss;
 
 	ss << "Words in morph: " << (int)path->size() << "\n";
@@ -462,8 +479,7 @@ void printPathWords(vector<string>* path)
 	return;
 }
 
-void printPathModifications(vector<string>* path)
-{
+void printPathModifications(vector<string>* path) {
 	ostringstream ss;
 
 	ss << "Words in morph: " << (int)path->size() << "\n";
@@ -491,8 +507,7 @@ void printPathModifications(vector<string>* path)
 	return;
 }
 
-int find_positional_difference(string* current, string* next)
-{
+int find_positional_difference(string* current, string* next) {
 	int position = -1;
 
 	for (int i = 0; i < (int)current->length(); i++) {
@@ -515,8 +530,8 @@ int find_positional_difference(string* current, string* next)
 }
 
 
-void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry, DictionaryEntry* current)
-{
+void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry, DictionaryEntry* current) {
+
 	deck->push_front(DictionaryEntry(entry, current->getWord()));
 
 	return;
