@@ -318,7 +318,8 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 
 		for (list<string>::iterator it = dictionary->begin(); it != dictionary->end(); ++it) {
 			if (((int)(current_entry.getWord()->length() - it->length()) <= 1)
-				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)){
+				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)) {
+
 				if (modify == BOTH) {
 					if (checkIfChangeMorph(current_entry.getWord(), &(*it))
 						or checkIfLengthMorph(current_entry.getWord(), &(*it))) {
