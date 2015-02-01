@@ -26,44 +26,71 @@ enum Routing {noROUT, STACK, QUEUE};
 enum Modification {noMOD, CHANGE, LENGTH, BOTH};
 enum Output {DEFAULTOUTPUT, WOUT, MOUT};
 
-void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output);
-//
+// REQUIRES:
+// MODIFIES: begin, end, rout, modify, and output.
+// EFFECTS: uses argc and argv that are passed into the program
+//			to give values to begin, end, rout, modify, and output.
+void parse_command_line_input(int & argc, char *argv[], string &begin, string &end,
+							  Routing &rout, Modification &modify, Output &output);
 
-list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modification &modify);
-//
+// REQUIRES: begin and end are non-NULL pointers
+// MODIFIES:
+// EFFECTS: Returns a pointer to a list of strings that contains
+//			all the words in the entered dictionary.
+//			If modify == CHANGE, only words of the same length as
+//			begin are added to the dictionary
+list<string>* store_dictionary_in_data_structure(const string* begin, const string* end,
+												 const Modification &modify);
 
-vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, list<string>* dictionary);
-// Returns a pointer to a vector of string pointers that contains
+// REQUIRES: begin, end, and dictionary are non-NULL pointers
+// MODIFIES: dictionary
+// EFFECTS: Returns a pointer to a vector of strings that contains
 //		the path from begin to end through the dictionary.
 // ->at(0) contains *end, and ->back() contains *begin
+vector<string>* find_lettermans_path(const Routing &rout, const Modification &modify,
+									 string* begin, string* end,
+									 list<string>* dictionary);
 
-bool checkIfChangeMorph(string* one, string* two);
-//
+// REQUIRES: one and two are non-NULL pointers
+// MODIFIES:
+// EFFECTS: compares one to two to determine if one and two are a
+//			valid change word morph
+bool check_if_change_morph(const string* one, const string* two);
 
-bool checkIfLengthMorph(string* one, string* two);
-//
+// REQUIRES: one and two are non-NULL pointers
+// MODIFIES:
+// EFFECTS: compares one to two to determine if one and two are a
+//			valid length word morph
+bool check_if_length_morph(const string* one, const string* two);
 
-void printPathWords(vector<string>* path);
-//
+// REQUIRES: path is a non-NULL pointer
+// MODIFIES:
+// EFFECTS: prints out the words in path in the W format
+void print_path_words(const vector<string>* path);
 
-void printPathModifications(vector<string>* path);
-//
+// REQUIRES: path is a non-NULL pointer
+// MODIFIES:
+// EFFECTS: prints out the words in path in the M format
+void print_path_modifications(vector<string>* path);
 
-int find_positional_difference(string* current, string* next);
-//
+// REQUIRES: current and next are non-NULL pointers
+// MODIFIES:
+// EFFECTS: returns the index at which the string current differs
+//			from the string next
+int find_positional_difference(const string* current, const string* next);
 
-void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry, DictionaryEntry* current);
-//
+// REQUIRES: deck, entry, and current are all non-NULL pointers
+// MODIFIES: deck
+// EFFECTS: creates a new DictionaryEntry out of entry and current and
+//			adds it to the front of deck
+void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry,
+									   DictionaryEntry* current);
 
 int main(int argc, char *argv[]) {
-	// Uncomment to redirect stdin to take input from file
-//	ifstream arq(getenv("MYARQ"));
-//	cin.rdbuf(arq.rdbuf());
-	//
 
 	//valgrind will report memory leak when sync_with_stdio is false
 	ios_base::sync_with_stdio(false);
-	//
+	////////////////////////////////////////////////////////////////
 
 	string begin;
 	string end;
@@ -73,15 +100,15 @@ int main(int argc, char *argv[]) {
 	Modification modify = noMOD;
 	Output outp = DEFAULTOUTPUT;
 
-	parseCommandLineInput(argc, argv, begin, end, rout, modify, outp);
+	parse_command_line_input(argc, argv, begin, end, rout, modify, outp);
 
-	dictionary = storeDictionaryInDataStructure(&begin, &end, modify);
+	dictionary = store_dictionary_in_data_structure(&begin, &end, modify);
 
 	if (begin == end) {
 		path = new vector<string>(1, begin);
 	}
 	else {
-		path = findLettermansPath(rout, modify, &begin, &end, dictionary);
+		path = find_lettermans_path(rout, modify, &begin, &end, dictionary);
 	}
 
 	if (path->size() == 0) {
@@ -93,10 +120,10 @@ int main(int argc, char *argv[]) {
 	}
 	else {
 		if (outp == MOUT) {
-			printPathModifications(path);
+			print_path_modifications(path);
 		}
 		else {
-			printPathWords(path);
+			print_path_words(path);
 		}
 	}
 
@@ -106,7 +133,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output) {
+void parse_command_line_input(int & argc, char *argv[], string &begin, string &end, Routing &rout, Modification &modify, Output &output) {
 	static struct option longopts[] = {
 		{"stack",	no_argument,		NULL, 's'},
 		{"queue",	no_argument,		NULL, 'q'},
@@ -214,7 +241,8 @@ void parseCommandLineInput(int & argc, char *argv[], string &begin, string &end,
 	}
 }
 
-list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modification &modify) {
+list<string>* store_dictionary_in_data_structure(const string* begin, const string* end,
+												 const Modification &modify) {
 	list<string>* dictionary;
 
 	string size_in;
@@ -262,7 +290,8 @@ list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modific
 	else {
 		dictionary = new list<string>(size);
 
-		for (list<string>::iterator it = dictionary->begin(); getline(cin, entry) and (it != dictionary->end());) {
+		for (list<string>::iterator it = dictionary->begin();
+			 getline(cin, entry) and (it != dictionary->end()); ) {
 			if (entry.length() == 0) {
 				break;
 			}
@@ -304,7 +333,9 @@ list<string>* storeDictionaryInDataStructure(string* begin, string* end, Modific
 	return dictionary;
 }
 
-vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* begin, string* end, list<string>* dictionary) {
+vector<string>* find_lettermans_path(const Routing &rout, const Modification &modify,
+									string* begin, string* end,
+									list<string>* dictionary) {
 	vector<string>* path = new vector<string>();
 	list<DictionaryEntry>* used_entries = new list<DictionaryEntry>();
 
@@ -341,8 +372,8 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)) {
 
 				if (modify == BOTH) {
-					if (checkIfChangeMorph(current_entry.getWord(), &(*it))
-						or checkIfLengthMorph(current_entry.getWord(), &(*it))) {
+					if (check_if_change_morph(current_entry.getWord(), &(*it))
+						or check_if_length_morph(current_entry.getWord(), &(*it))) {
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
@@ -352,7 +383,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 					}
 				}
 				else if (modify == LENGTH) {
-					if (checkIfLengthMorph(current_entry.getWord(), &(*it))) {
+					if (check_if_length_morph(current_entry.getWord(), &(*it))) {
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
@@ -362,7 +393,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 					}
 				}
 				else if (modify == CHANGE) {
-					if (checkIfChangeMorph(current_entry.getWord(), &(*it))) {
+					if (check_if_change_morph(current_entry.getWord(), &(*it))) {
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
@@ -419,7 +450,7 @@ vector<string>* findLettermansPath(Routing &rout, Modification &modify, string* 
 	return path;
 }
 
-bool checkIfChangeMorph(string* one, string* two) {
+bool check_if_change_morph(const string* one, const string* two) {
 	if (one->size() == two->size()) {
 		int discrepancyNumber = 0;
 
@@ -439,11 +470,11 @@ bool checkIfChangeMorph(string* one, string* two) {
 	return false;
 }
 
-bool checkIfLengthMorph(string* one, string* two) {
+bool check_if_length_morph(const string* one, const string* two) {
 	if (((two->size() - one->size()) == 1) or ((one->size() - two->size()) == 1)) {
 
 		if (one->size() > two->size()) {
-			return checkIfLengthMorph(two, one);
+			return check_if_length_morph(two, one);
 		}
 
 		int discrepancyNumber = 0;
@@ -465,7 +496,7 @@ bool checkIfLengthMorph(string* one, string* two) {
 	return false;
 }
 
-void printPathWords(vector<string>* path) {
+void print_path_words(const vector<string>* path) {
 	ostringstream ss;
 
 	ss << "Words in morph: " << (int)path->size() << "\n";
@@ -479,7 +510,7 @@ void printPathWords(vector<string>* path) {
 	return;
 }
 
-void printPathModifications(vector<string>* path) {
+void print_path_modifications(vector<string>* path) {
 	ostringstream ss;
 
 	ss << "Words in morph: " << (int)path->size() << "\n";
@@ -507,7 +538,7 @@ void printPathModifications(vector<string>* path) {
 	return;
 }
 
-int find_positional_difference(string* current, string* next) {
+int find_positional_difference(const string* current, const string* next) {
 	int position = -1;
 
 	for (int i = 0; i < (int)current->length(); i++) {
