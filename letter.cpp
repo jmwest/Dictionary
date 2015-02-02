@@ -86,6 +86,11 @@ int find_positional_difference(const string* current, const string* next);
 void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry,
 									   DictionaryEntry* current);
 
+// REQUIRES:
+// MODIFIES:
+// EFFECTS: Prints the help message for when the --help or -h flags are input
+void print_help_message();
+
 int main(int argc, char *argv[]) {
 
 	//valgrind will report memory leak when sync_with_stdio is false
@@ -104,6 +109,7 @@ int main(int argc, char *argv[]) {
 
 	dictionary = store_dictionary_in_data_structure(&begin, &end, modify);
 
+	// Check for begin and end being the same word
 	if (begin == end) {
 		path = new vector<string>(1, begin);
 	}
@@ -148,6 +154,7 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 	int idx = 0;
 	char c;
 
+	// Use getopt to parse through command line input
 	while ((c = getopt_long(argc, argv, "sqclo:b:e:h", longopts, &idx)) != -1) {
 		switch (c) {
 			case 's':
@@ -164,6 +171,7 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 					rout = STACK;
 				}
 				break;
+
 			case 'q':
 				if (rout == STACK) {
 					cerr << "Stack and Queue were both specified. Program exit(1)\n";
@@ -178,6 +186,7 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 					rout = QUEUE;
 				}
 				break;
+
 			case 'c':
 				if (modify == LENGTH) {
 					modify = BOTH;
@@ -186,6 +195,7 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 					modify = CHANGE;
 				}
 				break;
+
 			case 'l':
 				if (modify == CHANGE) {
 					modify = BOTH;
@@ -194,6 +204,7 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 					modify = LENGTH;
 				}
 				break;
+
 			case 'o':
 				if (*optarg == 'M') {
 					output = MOUT;
@@ -206,16 +217,21 @@ void parse_command_line_input(int & argc, char *argv[], string &begin, string &e
 					exit(1);
 				}
 				break;
+
 			case 'b':
 				begin = string(optarg);
 				break;
+
 			case 'e':
 				end = string(optarg);
 				break;
+
 			case 'h':
-				cerr << "Useful help message here.\n";
+				print_help_message();
+
 				exit(0);
 				break;
+
 			default:
 				break;
 		}
@@ -255,6 +271,11 @@ list<string>* store_dictionary_in_data_structure(const string* begin, const stri
 
 	size = atoi(size_in.c_str());
 
+	// If change is the only modification allowed, all words that are
+	//	input that have a different length from that of begin and end
+	//	can be ignored. The first block of code in the IF statement
+	//	has a varied loop condition from the ELSE, since the dictionary
+	//	size can't be pre-determined for change only modification.
 	if (modify == CHANGE) {
 		dictionary = new list<string>();
 
@@ -345,11 +366,10 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 
 	deck->push_front(DictionaryEntry(begin));
 
+	// Find begin in dictionary and delete it
 	for (list<string>::iterator it = dictionary->begin(); it != dictionary->end(); ++it) {
 		if (*it == *begin) {
-			list<string>::iterator invalidated_it = it;
-			it--;
-			dictionary->erase(invalidated_it);
+			dictionary->erase(it);
 
 			break;
 		}
@@ -357,6 +377,8 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 
 	bool reachedTheEnd = false;
 
+	// Continue to take the next word out of deck and find all of its
+	//	word morphs until end is reached or deck is empty
 	while ((deck->size() != 0) and !reachedTheEnd) {
 		if (rout == STACK) {
 			current_entry = deck->front();
@@ -367,7 +389,11 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 			deck->pop_back();
 		}
 
+		// Loop through the dictionary and find all the word morphs for
+		//	the current word
 		for (list<string>::iterator it = dictionary->begin(); it != dictionary->end(); ++it) {
+			// Don't need to do any more with a word if it's length is more than 1
+			//	different from the current word
 			if (((int)(current_entry.getWord()->length() - it->length()) <= 1)
 				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)) {
 
@@ -403,6 +429,7 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 					}
 				}
 
+				// Check to see if the newest found word is end
 				if (deck->size() != 0) {
 					if (*deck->front().getWord() == *end) {
 						reachedTheEnd = true;
@@ -412,6 +439,7 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 			}
 		}
 
+		// Keep track of all entries found so the path can be found later.
 		used_entries->push_back(current_entry);
 	}
 
@@ -426,6 +454,8 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 			path->push_back(*begin);
 		}
 		else {
+			// Search through the used entries to find the way back from
+			//	end to begin
 			for (list<DictionaryEntry>::iterator it = used_entries->begin(); it != used_entries->end(); ++it) {
 				if (backtrack == *it->getWord()) {
 					path->push_back(backtrack);
@@ -472,13 +502,18 @@ bool check_if_change_morph(const string* one, const string* two) {
 
 bool check_if_length_morph(const string* one, const string* two) {
 	if (((two->size() - one->size()) == 1) or ((one->size() - two->size()) == 1)) {
-
+		// Swap one and two then call self since the length of one
+		//	must be greater than the length of two
 		if (one->size() > two->size()) {
 			return check_if_length_morph(two, one);
 		}
 
 		int discrepancyNumber = 0;
 
+		// Loop through both string indeces and check if the letters are
+		//	the same. If the letters are different the indexes shift
+		//	and then the search continues unless a second difference
+		//	is zero
 		for (int i = 0; i < ((int)(one->size() + two->size()) / 2); i++) {
 			if (one->at(i) != two->at(i + discrepancyNumber)) {
 				discrepancyNumber++;
@@ -518,6 +553,8 @@ void print_path_modifications(vector<string>* path) {
 	ss << path->back() << "\n";
 
 	for (int i = (int)path->size() - 1; i > 0; i--) {
+		// The three different ways to change a word; insertion, deletion,
+		//	and change; are checked for the appropriate printing option
 		if (path->at(i).length() == path->at(i - 1).length()) {
 			int position = find_positional_difference(&path->at(i), &path->at(i - 1));
 
@@ -561,9 +598,51 @@ int find_positional_difference(const string* current, const string* next) {
 }
 
 
-void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry, DictionaryEntry* current) {
+void add_word_to_deque_from_dictionary(deque<DictionaryEntry>* deck, string* entry,
+									   DictionaryEntry* current) {
 
 	deck->push_front(DictionaryEntry(entry, current->getWord()));
 
 	return;
 }
+
+void print_help_message() {
+	cerr << "\n///////////////////////////////////////////////////////";
+	cerr << "/////////////////////";
+	cerr << "\nThis program helps Letterman find his way from one word";
+	cerr << " to another!\nHe uses a dictionary provided by the user";
+	cerr << " to tackle some tricky word morphs.\n\n";
+	
+	cerr << "Command Line Input Options:\n";
+	cerr << "--------------------------------------------------------";
+	cerr << "--------------------\n";
+	
+	cerr << "--stack (-s)\t: Runs the program using a stack based\n";
+	cerr << "\t\trouting scheme for determining the word path.\n\n";
+	cerr << "--queue (-q)\t: Runs the program using a queue based routing\n";
+	cerr << "\t\tscheme for determining the word path.\n\n";
+	
+	cerr << "\t\tOnly one of stack and queue may be specified.\n\n";
+	
+	cerr << "--change (-c)\t: Runs the program allowing Letterman to change";
+	cerr << "\n\t\tone letter into another.\n\n";
+	cerr << "--length (-l)\t: Runs the program allowing Letterman to modify";
+	cerr << "\n\t\tthe length of a word by inserting or deleting a letter.\n";
+	cerr << "\n\t\tEither change or length or both may be specified.\n\n";
+	
+	cerr << "--output <W|M>\t: Requires either W (for word) or M";
+	cerr << " (for modification)\n  (-o <W|M>)\tfollow the flag to specify output type.\n\n";
+	cerr << "\t\tIf neither W or M are specified, the program defaults to W.\n\n";
+	
+	cerr << "--begin <word>\t: Specifies the word Letterman ";
+	cerr << "starts with.\n  (-b <word>)\n\n";
+	cerr << "--end <word>\t: Specifies the word Letterman ";
+	cerr << "ends with.\n  (-e <word>)\n\n";
+	
+	cerr << "--help (-h)\t: Outputs the message that was previously output\n";
+	cerr << "///////////////////////////////////////////////////////";
+	cerr << "/////////////////////\n\n";
+
+	return;
+}
+

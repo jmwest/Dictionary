@@ -18,12 +18,11 @@
 
 using namespace std;
 
-struct DictionaryEntry {
+class DictionaryEntry {
 public:
 	DictionaryEntry();
 	DictionaryEntry(string* word_entry);
 	DictionaryEntry(string* word_entry, string* previous_entry);
-	~DictionaryEntry();
 
 	void setWord(string* word_in);
 	void setPrevious(string* previous_in);
@@ -40,9 +39,8 @@ DictionaryEntry::DictionaryEntry()
 {}
 
 DictionaryEntry::DictionaryEntry(string* word_entry)
-{
-	word = *word_entry;
-}
+: word(*word_entry)
+{}
 
 DictionaryEntry::DictionaryEntry(string* word_entry, string* previous_entry)
 : word(*word_entry), previous(*previous_entry)
@@ -66,17 +64,6 @@ string* DictionaryEntry::getWord()
 string* DictionaryEntry::getPrevious()
 {
 	return &previous;
-}
-
-DictionaryEntry::~DictionaryEntry()
-{
-//	if (word) {
-//		delete word; word = NULL;
-//	}
-//
-//	if (previous) {
-//		delete previous; previous = NULL;
-//	}
 }
 
 #endif /* defined(__EECS_281_Project_1__Dictionary__) */
