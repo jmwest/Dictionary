@@ -279,6 +279,9 @@ list<string>* store_dictionary_in_data_structure(const string* begin, const stri
 	if (modify == CHANGE) {
 		dictionary = new list<string>();
 
+		// Complexity of this for loop is O(n), where n is the number
+		//	of words input into the dictionary that have the same length
+		//	as begin
 		while (getline(cin, entry)) {
 			if (entry.length() == 0) {
 				break;
@@ -311,6 +314,8 @@ list<string>* store_dictionary_in_data_structure(const string* begin, const stri
 	else {
 		dictionary = new list<string>(size);
 
+		// Complexity of this for loop is O(n), where n is the number
+		//	of words in the dictionary
 		for (list<string>::iterator it = dictionary->begin();
 			 getline(cin, entry) and (it != dictionary->end()); ) {
 			if (entry.length() == 0) {
@@ -379,6 +384,8 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 
 	// Continue to take the next word out of deck and find all of its
 	//	word morphs until end is reached or deck is empty
+	// Complexity of this while loop is O(n^2), where n is the number
+	//	of words in the dictionary
 	while ((deck->size() != 0) and !reachedTheEnd) {
 		if (rout == STACK) {
 			current_entry = deck->front();
@@ -391,11 +398,13 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 
 		// Loop through the dictionary and find all the word morphs for
 		//	the current word
+		// Complexity of this for loop is O(n), where n is the number
+		//	of words in the dictionary
 		for (list<string>::iterator it = dictionary->begin(); it != dictionary->end(); ++it) {
 			// Don't need to do any more with a word if it's length is more than 1
 			//	different from the current word
-			if (((int)(current_entry.getWord()->length() - it->length()) <= 1)
-				and ((int)(it->length() - current_entry.getWord()->length()) <= 1)) {
+			if ((((int)current_entry.getWord()->length() - (int)it->length()) <= 1)
+				and (((int)it->length() - (int)current_entry.getWord()->length()) <= 1)) {
 
 				if (modify == BOTH) {
 					if (check_if_change_morph(current_entry.getWord(), &(*it))
@@ -403,7 +412,7 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
-						it--;
+						--it;
 
 						dictionary->erase(invalidated_it);
 					}
@@ -413,7 +422,7 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
-						it--;
+						--it;
 						
 						dictionary->erase(invalidated_it);
 					}
@@ -423,7 +432,7 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 						add_word_to_deque_from_dictionary(deck, &(*it), &current_entry);
 
 						list<string>::iterator invalidated_it = it;
-						it--;
+						--it;
 						
 						dictionary->erase(invalidated_it);
 					}
@@ -456,7 +465,11 @@ vector<string>* find_lettermans_path(const Routing &rout, const Modification &mo
 		else {
 			// Search through the used entries to find the way back from
 			//	end to begin
-			for (list<DictionaryEntry>::iterator it = used_entries->begin(); it != used_entries->end(); ++it) {
+			// Complexity of this for loop is O(n), where n is the number
+			//	of words in used_entries
+			for (list<DictionaryEntry>::iterator it = used_entries->begin();
+				 it != used_entries->end(); ++it) {
+
 				if (backtrack == *it->getWord()) {
 					path->push_back(backtrack);
 					backtrack = *it->getPrevious();
@@ -484,9 +497,11 @@ bool check_if_change_morph(const string* one, const string* two) {
 	if (one->size() == two->size()) {
 		int discrepancyNumber = 0;
 
-		for (unsigned int i = 0; i < one->size(); i++) {
+		// Complexity of this for loop is O(n), where n is the length
+		//	of one and two
+		for (unsigned int i = 0; i < one->size(); ++i) {
 			if (one->at(i) != two->at(i)) {
-				discrepancyNumber++;
+				++discrepancyNumber;
 			}
 
 			if (discrepancyNumber >= 2) {
@@ -514,10 +529,12 @@ bool check_if_length_morph(const string* one, const string* two) {
 		//	the same. If the letters are different the indexes shift
 		//	and then the search continues unless a second difference
 		//	is zero
-		for (int i = 0; i < ((int)(one->size() + two->size()) / 2); i++) {
+		// Complexity of this for loop is O(n), where n is the length
+		//	of one
+		for (int i = 0; i < ((int)(one->size() + two->size()) / 2); ++i) {
 			if (one->at(i) != two->at(i + discrepancyNumber)) {
-				discrepancyNumber++;
-				i--;
+				++discrepancyNumber;
+				--i;
 			}
 
 			if (discrepancyNumber >= 2) {
@@ -536,7 +553,7 @@ void print_path_words(const vector<string>* path) {
 
 	ss << "Words in morph: " << (int)path->size() << "\n";
 	
-	for (int i = (int)path->size() - 1; i >= 0; i--) {
+	for (int i = (int)path->size() - 1; i >= 0; --i) {
 		ss << path->at(i) << "\n";
 	}
 
@@ -552,7 +569,9 @@ void print_path_modifications(vector<string>* path) {
 
 	ss << path->back() << "\n";
 
-	for (int i = (int)path->size() - 1; i > 0; i--) {
+	// Complexity of this for loop is O(n), where n is the number
+	//	of words in path
+	for (int i = (int)path->size() - 1; i > 0; --i) {
 		// The three different ways to change a word; insertion, deletion,
 		//	and change; are checked for the appropriate printing option
 		if (path->at(i).length() == path->at(i - 1).length()) {
@@ -578,7 +597,9 @@ void print_path_modifications(vector<string>* path) {
 int find_positional_difference(const string* current, const string* next) {
 	int position = -1;
 
-	for (int i = 0; i < (int)current->length(); i++) {
+	// Complexity of this for loop is O(n), where n is the length
+	//	of current
+	for (int i = 0; i < (int)current->length(); ++i) {
 		if (i == (int)next->length()) {
 			position = i;
 			break;
@@ -641,7 +662,7 @@ void print_help_message() {
 	
 	cerr << "--help (-h)\t: Outputs the message that was previously output\n";
 	cerr << "///////////////////////////////////////////////////////";
-	cerr << "/////////////////////\n\n";
+	cerr << "/////////////////////\n\n" << endl;
 
 	return;
 }
