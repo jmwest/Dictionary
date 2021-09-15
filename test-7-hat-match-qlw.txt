@@ -1,0 +1,12 @@
+10
+// 10 word dictionary from hat to match.
+hat
+at
+bat
+bath
+bah
+ah
+mah
+math
+mach
+match
